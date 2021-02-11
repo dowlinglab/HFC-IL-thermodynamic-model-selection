@@ -83,7 +83,7 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.state_block.pressure.unfix()
         m.fs.state_block.temperature.fix(float(data["temperature"]))
         m.fs.state_block.mole_frac_phase_comp['Liq', comp_1].fix(float(data[x_comp_1]))
-        m.fs.state_block.mole_frac_phase_comp['Liq', comp_2,].fix(float(data[x_comp_2]))
+        m.fs.state_block.mole_frac_phase_comp['Liq', comp_2].fix(float(data[x_comp_2]))
         m.fs.state_block.mole_frac_comp[comp_1].fix(float(data[x_comp_1])+eps)
         m.fs.state_block.mole_frac_comp[comp_2].unfix()
 
