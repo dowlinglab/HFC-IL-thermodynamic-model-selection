@@ -117,9 +117,9 @@ configuration = {
     "phase_equilibrium_state": {("Vap", "Liq"): smooth_VLE},
     "bubble_dew_method": LogBubbleDew,
     "parameter_data": {"PR_kappa": {("emimTf2N", "emimTf2N"): 0.000,
-                                    ("emimTf2N", "R32"): -0.024097,
+                                    ("emimTf2N", "R32"): -0.01408977877696036,
                                     ("R32", "R32"): 0.000,
-                                    ("R32", "emimTf2N"): -0.03129}}}
+                                    ("R32", "emimTf2N"): -0.018059739008510666}}}
 
 
 # In[ ]:
