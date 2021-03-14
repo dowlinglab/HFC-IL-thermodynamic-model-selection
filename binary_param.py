@@ -117,8 +117,9 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
     pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
 
     obj_value, parameters = pest.theta_est()
+#     print_params(obj_value, parameters)
+    return(obj_value,parameters)
 
-    print_params(obj_value, parameters)
 
 
 
