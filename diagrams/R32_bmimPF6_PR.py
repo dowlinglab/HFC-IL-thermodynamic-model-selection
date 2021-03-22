@@ -36,7 +36,7 @@ from idaes.generic_models.properties.core.phase_equil.bubble_dew import \
 from idaes.generic_models.properties.core.phase_equil.forms import log_fugacity
 
 
-import idaes.generic_models.properties.core.pure.RPP4 as RPP
+import idaes.generic_models.properties.core.pure.RPP as RPP
 import idaes.generic_models.properties.core.pure.NIST as NIST
 
 # Set up logger
