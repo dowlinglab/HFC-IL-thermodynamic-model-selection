@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
-#!/usr/bin/env python
-# coding: utf-8
-
 # In[1]:
 
 
@@ -43,12 +37,14 @@ _log = logging.getLogger(__name__)
 # Configuration dictionary for an ideal Benzene-Toluene system
 
 # Data Sources:
-# [1] Separation of CO2 and H2S using room-temperature ionic liquid [bmim][PF6] Mark B.Shiflett, A.Yokozeki, 2010
-# [2] The Properties of Gases and Liquids (1987) 4th edition, Chemical Engineering Series - Robert C. Reid
-# [3] Critical Properties, Normal Boiling Temperatures, and Acentric Factors of Fifty Ionic Liquids.
-#     J. O. Valderrama and P. A. Robles. Industrial & Engineering Chemistry Research 2007 46 (4), 1338-1344.
-#     DOI: 10.1021/ie0603058
-# [4] Engineering Toolbox, https://www.engineeringtoolbox.com
+# [5] Mohammad Shokouhi, Amir Hossein Saali, Mehdi Vahidi, Ali Taghi Zoghi, Amir Hossein Jalili, 
+#     Diffusivity and solubility of carbonyl sulfide and sulfur dioxide in 1-ethyl-3-methylimidazolium
+#     bis (trifluoromethyl) sulfonylimide ([emim][Tf2N]): Experimental measurement and modelling, The 
+#     Journal of Chemical Thermodynamics,Vol 132, 2019, Pages 411-422, SSN 0021-9614, 
+#     https://doi.org/10.1016/j.jct.2019.01.019. (https://www.sciencedirect.com/science/article/pii/S0021961419300412)
+# [1] The Properties of Gases and Liquids (1987)
+#     4th edition, Chemical Engineering Series - Robert C. Reid
+# [3] Engineering Toolbox, https://www.engineeringtoolbox.com
 #     Retrieved 1st December, 2019
 # ---------------------------------------------------------------------
 
@@ -62,12 +58,12 @@ configuration = {
                     "valid_phase_types": PT.liquidPhase,
                     "phase_equilibrium_form": {("Vap", "Liq"): log_fugacity},
                     "parameter_data": {
-                        "mw": (226.0E-3, pyunits.kg/pyunits.mol),  # [3]
-                        "pressure_crit": (2.04E06, pyunits.Pa),  # [1]
-                        "temperature_crit": (632.3, pyunits.K),  # [3]
-                        "omega": 0.8489,  # [3]
+                        "mw": (226.0E-3, pyunits.kg/pyunits.mol),  # [5]
+                        "pressure_crit": (2.04E06, pyunits.Pa),  # [5]
+                        "temperature_crit": (632.3, pyunits.K),  # [5]
+                        "omega": 0.8489,  # 51]
                         "cp_mol_ig_comp_coeff": {
-                            'A': (3259.5745, pyunits.J/pyunits.mol/pyunits.K), 
+                            'A': (3259.5745, pyunits.J/pyunits.mol/pyunits.K),  # [1] for bmimPF6
                             'B': (-28.5610, pyunits.J/pyunits.mol/pyunits.K**2),
                             'C': (0.09354, pyunits.J/pyunits.mol/pyunits.K**3),
                             'D': (-0.0001000673, pyunits.J/pyunits.mol/pyunits.K**4)},
@@ -130,4 +126,3 @@ configuration = {
                                     ("bmimBF4", "R125"): -0.014,
                                     ("R125", "R125"): 0.000,
                                     ("R125", "bmimBF4"): -0.018}}}
-

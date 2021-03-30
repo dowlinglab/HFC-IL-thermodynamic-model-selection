@@ -19,7 +19,7 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 
 def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
     init_temp = 323.15, init_press = 399800, init_x_c1 = 0.5, init_x_c2 = 0.5,
-    init_kappa_1_2 = -0.3, init_kappa_2_1 = 0.5, eps = 0.0, scaling_fac = 1e-4):
+    init_kappa_1_2 = -0.3, init_kappa_2_1 = 0.5, eps = 0.0, scaling_fac = 1e-4,read= True):
     """
     Estimates kappa parameters for Peng Robinson equation.
 
@@ -38,11 +38,15 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         init_kappa_2_1 = initial guess for kappa parameter component 1-component 2
         eps = extra
         scaling_fac = 1e-4)
+        read: determines if read csv file or not
 
     Returns:
         printed parameters for binary interaction parameters
     """
-    data = pd.read_csv(file)
+    if read:
+        data = pd.read_csv(file)
+    else:
+        data = file
 
     def PR_model(data):
         """
