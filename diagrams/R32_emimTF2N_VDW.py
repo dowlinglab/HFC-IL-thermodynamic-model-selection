@@ -102,11 +102,11 @@ configuration = {
     "phases":  {'Liq': {"type": LiquidPhase,
                         "equation_of_state": Cubic,
                         "equation_of_state_options": {
-                            "type": CubicType.PR}},
+                            "type": CubicType.VDW}},
                 'Vap': {"type": VaporPhase,
                         "equation_of_state": Cubic,
                         "equation_of_state_options": {
-                            "type": CubicType.PR}}},
+                            "type": CubicType.VDW}}},
 
     # Set base units of measurement
     "base_units": {"time": pyunits.s,
@@ -127,7 +127,7 @@ configuration = {
     "phases_in_equilibrium": [("Vap", "Liq")],
     "phase_equilibrium_state": {("Vap", "Liq"): smooth_VLE},
     "bubble_dew_method": LogBubbleDew,
-    "parameter_data": {"PR_kappa": {("emimTF2N", "emimTF2N"): 0.000,
+    "parameter_data": {"VDW_kappa": {("emimTF2N", "emimTF2N"): 0.000,
                                     ("emimTF2N", "R32"): -0.024097,
                                     ("R32", "R32"): 0.000,
                                     ("R32", "emimTF2N"): -0.024097 }}}
