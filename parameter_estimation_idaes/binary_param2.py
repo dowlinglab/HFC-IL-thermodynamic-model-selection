@@ -63,17 +63,12 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.state_block = m.fs.properties.state_block_class(
             default={"parameters": m.fs.properties,
                      "defined_state": True})
-
+        x = float(data[x_comp_1])+eps
         m.fs.state_block.flow_mol.fix(1)
         m.fs.state_block.temperature.fix(float(data["temperature"]))
         m.fs.state_block.pressure.fix(float(data["pressure"]))
-        # m.fs.state_block.pressure.fix(init_press)
-        # m.fs.state_block.mole_frac_comp[comp_2].fix(init_x_c1)
-        # m.fs.state_block.mole_frac_comp[comp_1].fix(init_x_c2)
-        # m.fs.state_block.mole_frac_phase_comp['Liq', comp_1].fix(float(data[x_comp_1]))
-        # m.fs.state_block.mole_frac_phase_comp['Liq', comp_2].fix(float(data[x_comp_2]))
-        m.fs.state_block.mole_frac_comp[comp_1].fix(float(data[x_comp_1]))
-        m.fs.state_block.mole_frac_comp[comp_2].fix(float(data[x_comp_2]))
+        m.fs.state_block.mole_frac_comp[comp_2].fix(1-x)
+        m.fs.state_block.mole_frac_comp[comp_1].fix(x)
 
         # parameter - kappa_ij (set at 0.3, 0 if i=j)
         m.fs.properties.PR_kappa[comp_2, comp_2].fix(0)
@@ -86,6 +81,8 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
+        m.fs.state_block.mole_frac_comp[comp_2].unfix()
+        m.fs.state_block.mole_frac_comp[comp_1].unfix()
         m.fs.state_block.temperature.fix(float(data["temperature"]))
         m.fs.state_block.mole_frac_phase_comp['Liq', comp_1].fix(float(data[x_comp_1]))
         m.fs.state_block.mole_frac_phase_comp['Liq', comp_2].fix(float(data[x_comp_2]))
@@ -122,9 +119,11 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
 
     pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
 
-    obj_value, parameters = pest.theta_est()
+    obj_value, parameters,a= pest.theta_est(calc_cov=True)
 
     print_params(obj_value, parameters)
+    
+    print("covariance_matrix",a)
 
 
 
