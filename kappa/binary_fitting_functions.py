@@ -28,9 +28,6 @@ from idaes.generic_models.properties.core.generic.generic_property import (
 from idaes.generic_models.unit_models import Flash
 # Import degrees of freedom tool
 from idaes.core.util.model_statistics import degrees_of_freedom
-# parmest (binary_param2)
-from binary_param2 import binary_params_peng
-
 
 def calc_outlet_xP(data, m, HFC, IL, k21,k12,verbose=False):
     '''Inputs
