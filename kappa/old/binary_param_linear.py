@@ -19,9 +19,11 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 
 def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
     init_temp = 323.15, init_press = 399800, init_x_c1 = 0.5, init_x_c2 = 0.5,
-    init_kappa_A_1_2 = -0.3, init_kappa_A_2_1 = 0.5, eps = 0.0, scaling_fac = 1e-4,read= True):
+    init_kappa_1_2A = -0.3, init_kappa_2_1A = 0.5,
+    init_kappa_1_2B = -0.3, init_kappa_2_1B = 0.5,
+    eps = 0.1, scaling_fac = 1e-9):
     """
-    Estimates kappa_A parameters for Peng Robinson equation.
+    Estimates kappa parameters for Peng Robinson equation.
 
     Args:
         file: csv data file in Pa and K
@@ -34,19 +36,15 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         init_press = pressure to initialize model [Pa]
         init_x_c1 = component 1 mole fraction to initialize model [mol/mol]
         init_x_c2 = component 1 mole fraction to initialize model [mol/mol]
-        init_kappa_A_1_2 = initial guess for kappa_A parameter component 2-component 1
-        init_kappa_A_2_1 = initial guess for kappa_A parameter component 1-component 2
+        init_kappa_1_2 = initial guess for kappa parameter component 2-component 1
+        init_kappa_2_1 = initial guess for kappa parameter component 1-component 2
         eps = extra
         scaling_fac = 1e-4)
-        read: determines if read csv file or not
 
     Returns:
         printed parameters for binary interaction parameters
     """
-    if read:
-        data = pd.read_csv(file)
-    else:
-        data = file
+    data = file
 
     def PR_model(data):
         """
@@ -74,11 +72,15 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.state_block.mole_frac_comp[comp_2].fix(1-x)
         m.fs.state_block.mole_frac_comp[comp_1].fix(x)
 
-        # parameter - kappa_A_ij (set at 0.3, 0 if i=j)
+        # parameter - kappa_ij (set at 0.3, 0 if i=j)
         m.fs.properties.PR_kappa_A[comp_2, comp_2].fix(0)
-        m.fs.properties.PR_kappa_A[comp_2, comp_1].fix(init_kappa_A_2_1)
+        m.fs.properties.PR_kappa_A[comp_2, comp_1].fix(init_kappa_2_1A)
         m.fs.properties.PR_kappa_A[comp_1, comp_1].fix(0)
-        m.fs.properties.PR_kappa_A[comp_1, comp_2].fix(init_kappa_A_1_2)
+        m.fs.properties.PR_kappa_A[comp_1, comp_2].fix(init_kappa_1_2A)
+        m.fs.properties.PR_kappa_B[comp_2, comp_2].fix(0)
+        m.fs.properties.PR_kappa_B[comp_2, comp_1].fix(init_kappa_2_1B)
+        m.fs.properties.PR_kappa_B[comp_1, comp_1].fix(0)
+        m.fs.properties.PR_kappa_B[comp_1, comp_2].fix(init_kappa_1_2B)
 
         # Initialize the flash unit
         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
@@ -100,6 +102,12 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.properties.PR_kappa_A[comp_1, comp_2].setlb(-5)
         m.fs.properties.PR_kappa_A[comp_1, comp_2].setub(5)
 
+        m.fs.properties.PR_kappa_B[comp_2, comp_1].setlb(-5)
+        m.fs.properties.PR_kappa_B[comp_2, comp_1].setub(5)
+
+        m.fs.properties.PR_kappa_B[comp_1, comp_2].setlb(-5)
+        m.fs.properties.PR_kappa_B[comp_1, comp_2].setub(5)
+
         # Return initialized flash model
         return m
 
@@ -118,16 +126,18 @@ def binary_params_peng(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
 
         return expr * scaling_fac
 
-    variable_name = ["fs.properties.PR_kappa_A['" + comp_2 + "','" + comp_1 + "']",
-                     "fs.properties.PR_kappa_A['" + comp_1 + "','" + comp_2 + "']"]
+    variable_name = ["fs.properties.PR_kappa_A['" + comp_1 + "','" + comp_2 + "']",
+                     "fs.properties.PR_kappa_A['" + comp_2 + "','" + comp_1 + "']",
+                     "fs.properties.PR_kappa_B['" + comp_1 + "','" + comp_2 + "']",
+                     "fs.properties.PR_kappa_B['" + comp_2 + "','" + comp_1 + "']"]
 
     pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
 
-    obj_value, parameters = pest.theta_est()
+    obj_value, parameters,a= pest.theta_est(calc_cov=True)
 
     print_params(obj_value, parameters)
 
-
+    print("covariance_matrix",a)
 
 def print_params(obj_value, parameters):
     """
