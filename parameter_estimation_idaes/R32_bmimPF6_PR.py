@@ -62,8 +62,8 @@ configuration = {
                     "phase_equilibrium_form": {("Vap", "Liq"): log_fugacity},
                     "parameter_data": {
                         "mw": (284.18E-3, pyunits.kg/pyunits.mol),  # [1]
-                        "pressure_crit": (24e5, pyunits.Pa),  # [1]
-                        "temperature_crit": (860, pyunits.K),  # [1]
+                        "pressure_crit": (25e5, pyunits.Pa),  # [1]
+                        "temperature_crit": (1000, pyunits.K),  # [1]
                         "omega": 0.7917,  # [1]
                         "cp_mol_ig_comp_coeff": {
                             'A': (3259.5745, pyunits.J/pyunits.mol/pyunits.K),  # [1]
