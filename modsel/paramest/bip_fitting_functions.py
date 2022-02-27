@@ -496,7 +496,8 @@ def constant(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.properties.PR_kappa_C[comp_1, comp_1].fix(0)
         m.fs.properties.PR_kappa_C[comp_1, comp_2].fix(0)
         # Initialize the flash unit
-        m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+        print(data["pressure"])
+        m.fs.state_block.initialize()#(outlvl=idaeslog.CRITICAL)
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
