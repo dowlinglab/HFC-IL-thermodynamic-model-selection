@@ -189,10 +189,10 @@ def fugacity(P,T,x1,k,SP,verbose=False,scaled=True,unit_change=True,one_l=True):
                 print("k =",k[i,j])
     
     #Constants
-    if unit_change==True:
-        R = 8.314e-3 #m3*MPa/K/kmol
-    else:
-        R = 8.314e-6 #m3*MPa/K/mol
+#     if unit_change==True:
+#         R = 8.314e-3 #m3*MPa/K/kmol
+#     else:
+    R = 8.314e-6 #m3*MPa/K/mol
     
     comps = SP.components
     
