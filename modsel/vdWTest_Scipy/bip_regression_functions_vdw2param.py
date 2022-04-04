@@ -328,10 +328,12 @@ def fugacity(P,T,x1,k,SP,verbose=False,scaled=True,unit_change=True,one_l=True):
     if verbose:
         print("ln(x)+lnphi_L - lnphi_V = ",check_equil(MoleFrac[comps[0]],lnphi_L[comps[0]],lnphi_V))
         
+    residual = check_equil(MoleFrac[comps[0]],lnphi_L[comps[0]],lnphi_V)
+        
 #     assert V_L >0.00001, "V_L is too small"
 #     assert V_V <10000, "V_V is too large"
         
-    return {"x1":MoleFrac[comps[0]], "a_pure":a_pure, "a_mix":a_mix, "b_pure":b_pure, "b_mix":b_mix, "alpha_l":alpha_l_save,"beta_l":beta_l_save,"gamma_l":gamma_l_save,"VL":V_L,"A_star_L":A_star_L,"B_star_L":B_star_L,"Z_compressibility_L":Z_compressibility_L, "ln_phi_L":lnphi_L[comps[0]],"phi_L_HFC":phi_L_HFC,"alpha_v":alpha_v_save,"beta_v":beta_v_save,"gamma_v":gamma_v_save, "VV":V_V, "A_star_V":A_star_V,"B_star_V":B_star_V, "Z_compressibility_V":Z_compressibility_V,"ln_phi_V":lnphi_V,"phi_V_HFC":phi_V_HFC,"P":P}
+    return {"x1":MoleFrac[comps[0]], "a_pure":a_pure, "a_mix":a_mix, "b_pure":b_pure, "b_mix":b_mix, "alpha_l":alpha_l_save,"beta_l":beta_l_save,"gamma_l":gamma_l_save,"VL":V_L,"A_star_L":A_star_L,"B_star_L":B_star_L,"Z_compressibility_L":Z_compressibility_L, "ln_phi_L":lnphi_L[comps[0]],"phi_L_HFC":phi_L_HFC,"alpha_v":alpha_v_save,"beta_v":beta_v_save,"gamma_v":gamma_v_save, "VV":V_V, "A_star_V":A_star_V,"B_star_V":B_star_V, "Z_compressibility_V":Z_compressibility_V,"ln_phi_V":lnphi_V,"phi_V_HFC":phi_V_HFC,"P":P,"residual":residual}
     
 
 def inexact_newton(f,x0,delta = 1.0e-7, epsilon=1.0e-6,max_iter=50, LOUD=False,bnds=None):
