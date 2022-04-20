@@ -66,8 +66,8 @@ configuration = {
                         "entr_mol_form_vap_comp_ref": (
                             137.5, pyunits.J/pyunits.mol/pyunits.K)}},
         "R125": {"type": Component,
-                  "enth_mol_ig_comp": RPP,
-                  "entr_mol_ig_comp": RPP,
+                  "enth_mol_ig_comp": RPP4,
+                  "entr_mol_ig_comp": RPP4,
                   "pressure_sat_comp": NIST,
                   "phase_equilibrium_form": {("Vap", "Liq"): log_fugacity},
                   "parameter_data": {
