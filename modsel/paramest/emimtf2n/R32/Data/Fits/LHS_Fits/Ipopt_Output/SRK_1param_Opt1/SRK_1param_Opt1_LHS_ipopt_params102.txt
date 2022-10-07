@@ -1,0 +1,83 @@
+
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit http://projects.coin-or.org/Ipopt
+
+This version of Ipopt was compiled from source code available at
+    https://github.com/IDAES/Ipopt as part of the Institute for the Design of
+    Advanced Energy Systems Process Systems Engineering Framework (IDAES PSE
+    Framework) Copyright (c) 2018-2019. See https://github.com/IDAES/idaes-pse.
+
+This version of Ipopt was compiled using HSL, a collection of Fortran codes
+    for large-scale scientific computation.  All technical papers, sales and
+    publicity material resulting from use of the HSL codes within IPOPT must
+    contain the following acknowledgement:
+        HSL, a collection of Fortran codes for large-scale scientific
+        computation. See http://www.hsl.rl.ac.uk.
+******************************************************************************
+
+This is Ipopt version 3.13.2, running with linear solver ma27.
+
+Number of nonzeros in equality constraint Jacobian...:      808
+Number of nonzeros in inequality constraint Jacobian.:        0
+Number of nonzeros in Lagrangian Hessian.............:      702
+
+Total number of variables............................:      351
+                     variables with only lower bounds:      108
+                variables with lower and upper bounds:      189
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      350
+Total number of inequality constraints...............:        0
+        inequality constraints with only lower bounds:        0
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:        0
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  0.0000000e+00 4.63e-01 1.14e-13  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  3.3417153e-01 3.28e-01 2.23e+04  -1.0 1.28e+05    -  7.38e-01 2.94e-01h  1
+   2  3.4852567e-01 3.24e-01 2.23e+04  -1.0 1.12e+05    -  8.45e-01 9.32e-03h  1
+   3  1.4844145e+01 5.57e-02 2.19e+04  -1.0 2.50e+05    -  7.51e-01 9.46e-01h  1
+   4  2.1175908e+01 2.07e-03 2.85e+02  -1.0 5.07e+04    -  9.42e-01 9.90e-01h  1
+   5  2.1405778e+01 2.29e-05 1.22e+01  -1.0 1.72e+03    -  9.90e-01 9.90e-01h  1
+   6  2.1408309e+01 2.21e-05 2.52e+06  -1.0 5.37e+02    -  9.90e-01 3.09e-02f  6
+   7  2.1410854e+01 2.18e-05 5.13e+06  -1.0 1.08e+03    -  9.90e-01 1.55e-02f  7
+   8  2.1568773e+01 6.78e-06 7.88e+04  -1.0 1.05e+03    -  1.00e+00 9.90e-01H  1
+   9  2.1570168e+01 8.20e-08 2.76e+06  -1.0 9.19e+00    -  1.00e+00 9.90e-01h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  2.1570173e+01 8.21e-10 2.75e+08  -1.0 3.39e-02    -  1.00e+00 9.90e-01h  1
+  11  2.1570173e+01 2.63e-11 2.75e+10  -1.0 3.39e-04    -  1.00e+00 9.90e-01h  1
+In iteration 11, 27 Slacks too small, adjusting variable bounds
+  12  2.1570173e+01 3.19e-11 2.75e+12  -1.0 3.40e-06    -  1.00e+00 9.90e-01h  1
+  13  2.1570173e+01 2.44e-11 1.37e-02  -1.0 4.52e-06    -  1.00e+00 1.00e+00h  1
+  14  2.1570163e+01 1.78e-11 2.81e+12  -9.0 1.65e+03    -  9.99e-01 3.94e-05f 15
+  15  2.1570143e+01 1.35e-11 2.81e+12  -9.0 1.12e+03    -  9.99e-01 1.16e-04f 14
+  16  2.1570133e+01 2.68e-11 2.81e+12  -9.0 1.07e+03    -  1.00e+00 6.06e-05f 15
+  17  2.1570113e+01 2.09e-11 2.81e+12  -9.0 1.06e+03    -  1.00e+00 1.22e-04f 14
+  18  2.1570108e+01 1.47e-11 2.81e+12  -9.0 1.06e+03    -  1.00e+00 3.05e-05f 16
+  19  2.1407201e+01 1.72e-04 9.71e+07  -9.0 1.06e+03    -  1.00e+00 1.00e+00f  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  2.1406497e+01 4.23e-09 1.74e-04  -9.0 4.62e+00    -  1.00e+00 1.00e+00h  1
+  21  2.1406497e+01 1.68e-11 3.71e-12  -9.0 9.26e-06    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 21
+
+                                   (scaled)                 (unscaled)
+Objective...............:   2.1406497110894858e+01    2.1406497110894858e+01
+Dual infeasibility......:   3.7050335766138803e-12    3.7050335766138803e-12
+Constraint violation....:   1.6768364474728514e-11    1.6768364474728514e-11
+Complementarity.........:   9.0909093727905603e-10    9.0909093727905603e-10
+Overall NLP error.......:   6.4689249332109757e-11    9.0909093727905603e-10
+
+
+Number of objective function evaluations             = 123
+Number of objective gradient evaluations             = 22
+Number of equality constraint evaluations            = 123
+Number of inequality constraint evaluations          = 0
+Number of equality constraint Jacobian evaluations   = 22
+Number of inequality constraint Jacobian evaluations = 0
+Number of Lagrangian Hessian evaluations             = 21
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.034
+Total CPU secs in NLP function evaluations           =      0.666
+
+EXIT: Optimal Solution Found.

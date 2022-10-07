@@ -21,7 +21,7 @@ def polynomial(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
             init_kappa_1_2B = -0.3, init_kappa_2_1B = 0.5,
             init_kappa_1_2C = -0.3, init_kappa_2_1C = 0.5,
             init_kappa_1_2D = -0.3, init_kappa_2_1D = 0.5,
-            eps = 0.0, scaling_fac = 1e-4, terms=3):
+            eps = 0.0, scaling_fac = 1e-4, filename='filename_test.csv'):
     """
     Estimates kappa parameters for Peng Robinson equation.
     Args:
@@ -87,7 +87,8 @@ def polynomial(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.properties.PR_kappa_D[comp_1, comp_2].fix(init_kappa_1_2D)
 
         # Initialize the flash unit
-        m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+#         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+        m.fs.state_block.initialize(outlvl=50)
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
@@ -151,13 +152,15 @@ def polynomial(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
                      "fs.properties.PR_kappa_D['" + comp_1 + "','" + comp_2 + "']"]
 
 
-    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
+    solver_opts_dict = {'output_file':filename}
+    
+    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=False, solver_options=solver_opts_dict)
 
     obj_value, parameters, a= pest.theta_est(calc_cov=True)
 
-    print_params(obj_value, parameters)
+#     print_params(obj_value, parameters)
 
-    print("covariance_matrix",a)
+#     print("covariance_matrix",a)
     
     return parameters, obj_value, a
 
@@ -166,7 +169,7 @@ def cuadratic(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
             init_kappa_1_2A = -0.3, init_kappa_2_1A = 0.5,
             init_kappa_1_2B = -0.3, init_kappa_2_1B = 0.5,
             init_kappa_1_2C = -0.3, init_kappa_2_1C = 0.5,
-            eps = 0.0, scaling_fac = 1e-4, terms=3):
+            eps = 0.0, scaling_fac = 1e-4, filename='filename_test.csv'):#, terms=3):
     """
     Estimates kappa parameters for Peng Robinson equation.
     Args:
@@ -228,7 +231,8 @@ def cuadratic(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.properties.PR_kappa_C[comp_1, comp_2].fix(init_kappa_1_2C)
 
         # Initialize the flash unit
-        m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+#         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+        m.fs.state_block.initialize(outlvl=50)
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
@@ -284,13 +288,15 @@ def cuadratic(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
                      "fs.properties.PR_kappa_C['" + comp_1 + "','" + comp_2 + "']"]
 
 
-    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
+    solver_opts_dict = {'output_file':filename}
+    
+    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=False, solver_options=solver_opts_dict)
 
     obj_value, parameters, a= pest.theta_est(calc_cov=True)
 
-    print_params(obj_value, parameters)
+#     print_params(obj_value, parameters)
 
-    print("covariance_matrix",a)
+#     print("covariance_matrix",a)
     
     return parameters, obj_value, a
 
@@ -298,7 +304,7 @@ def linear(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
     init_temp = 323.15, init_press = 399800, init_x_c1 = 0.5, init_x_c2 = 0.5,
     init_kappa_1_2A = -0.3, init_kappa_2_1A = 0.5,
     init_kappa_1_2B = -0.3, init_kappa_2_1B = 0.5,
-    eps = 0.1, scaling_fac = 1e-9, optional_params = 'Four'):
+    eps = 0.1, scaling_fac = 1e-9, optional_params = 'Four', filename='filename_test.csv'):
     """
     Estimates kappa parameters for Peng Robinson equation.
     Args:
@@ -359,7 +365,8 @@ def linear(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.properties.PR_kappa_C[comp_1, comp_1].fix(0)
         m.fs.properties.PR_kappa_C[comp_1, comp_2].fix(0)
         # Initialize the flash unit
-        m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+#         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+        m.fs.state_block.initialize(outlvl=50)
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
@@ -419,19 +426,21 @@ def linear(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
                          "fs.properties.PR_kappa_A['" + comp_2 + "','" + comp_1 + "']",
                          "fs.properties.PR_kappa_B['" + comp_2 + "','" + comp_1 + "']"]
 
-    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
+    solver_opts_dict = {'output_file':filename}
+    
+    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=False, solver_options=solver_opts_dict)
 
     obj_value, parameters,a= pest.theta_est(calc_cov=True)
 
-    print_params(obj_value, parameters)
+#     print_params(obj_value, parameters)
 
-    print("covariance_matrix",a)
+#     print("covariance_matrix",a)
     
     return parameters, obj_value, a
 
 def constant(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
     init_temp = 323.15, init_press = 399800, init_x_c1 = 0.5, init_x_c2 = 0.5,
-    init_kappa_A_1_2 = -0.3, init_kappa_A_2_1 = 0.5, eps = 0.0, scaling_fac = 1e-4,read= True, optional_params = 'Two'):
+    init_kappa_A_1_2 = -0.3, init_kappa_A_2_1 = 0.5, eps = 0.0, scaling_fac = 1e-4,read= True, filename='filename_test.csv',optional_params = 'Two'):
     """
     Estimates kappa_A parameters for Peng Robinson equation.
     Args:
@@ -496,8 +505,8 @@ def constant(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.properties.PR_kappa_C[comp_1, comp_1].fix(0)
         m.fs.properties.PR_kappa_C[comp_1, comp_2].fix(0)
         # Initialize the flash unit
-        print(data["pressure"])
-        m.fs.state_block.initialize()#(outlvl=idaeslog.CRITICAL)
+#         print(data["pressure"])
+        m.fs.state_block.initialize(outlvl=50)#idaeslog.ERROR)#INFO_LOW)#(outlvl=idaeslog.CRITICAL)
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
@@ -510,11 +519,11 @@ def constant(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
         m.fs.state_block.mole_frac_comp[comp_2].unfix()
 
         # Set bounds on variables to be estimated
-        m.fs.properties.PR_kappa_A[comp_2, comp_1].setlb(-5)
-        m.fs.properties.PR_kappa_A[comp_2, comp_1].setub(5)
+        m.fs.properties.PR_kappa_A[comp_2, comp_1].setlb(-20)
+        m.fs.properties.PR_kappa_A[comp_2, comp_1].setub(20)
 
-        m.fs.properties.PR_kappa_A[comp_1, comp_2].setlb(-5)
-        m.fs.properties.PR_kappa_A[comp_1, comp_2].setub(5)
+        m.fs.properties.PR_kappa_A[comp_1, comp_2].setlb(-20)
+        m.fs.properties.PR_kappa_A[comp_1, comp_2].setub(20)
 
         # Return initialized flash model
         return m
@@ -544,14 +553,20 @@ def constant(file, configuration, comp_1, comp_2, x_comp_1, x_comp_2,
     elif optional_params == 'Opt2': #fit kji_A: k[IL,R32]
         
         variable_name = ["fs.properties.PR_kappa_A['" + comp_2 + "','" + comp_1 + "']"]
-        
-    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=True)
+    
+#     print(filename)
+    
+    solver_opts_dict = {'output_file':filename}
+    
+#     print(solver_opts_dict)
+    
+    pest = parmest.Estimator(PR_model, data, variable_name, SSE, tee=False, solver_options=solver_opts_dict)
 
     obj_value, parameters, a = pest.theta_est(calc_cov=True)
 
-    print_params(obj_value, parameters)
+#     print_params(obj_value, parameters)
     
-    print("covariance_matrix",a)
+#     print("covariance_matrix",a)
     
     return parameters, obj_value, a
 
