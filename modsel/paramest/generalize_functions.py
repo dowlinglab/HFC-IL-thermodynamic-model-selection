@@ -26,7 +26,7 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 
 # Setup class for PR models
 class PRModels:
-    def __init__(self, theta, configuration, comp_1, comp_2, x_comp_1, x_comp_2, mode='constant'):
+    def __init__(self, theta, configuration, comp_1, comp_2, x_comp_1, x_comp_2):
         '''
         To run a PR model, you need:
         
@@ -36,7 +36,6 @@ class PRModels:
         comp_2: component 2
         x_comp_1: name of component 1 mole fraction column in csv file
         x_comp_2: name of component 1 mole fraction column in csv file
-        mode (str): type of PR model that is being used
         '''
         
         self.configuration = configuration
@@ -46,30 +45,6 @@ class PRModels:
         self.x_comp_1 = x_comp_1
         self.x_comp_2 = x_comp_2
         
-#         if mode == '1param_Opt1':
-#             self.__1param_Opt1_parse_theta()
-            
-#         if mode == '1param_Opt2':
-#             self.__1param_Opt2_parse_theta()
-        
-#         if mode == 'constant':
-#             self.__constant_parse_theta()
-            
-#         if mode == '3params_Opt1':
-#             self.__3params_Opt1_parse_theta()
-            
-#         if mode == '3params_Opt2':
-#             self.__3params_Opt2_parse_theta()
-            
-#         if mode == 'linear':
-#             self.__linear_parse_theta()
-            
-#         if mode == 'quadratic':
-#             self.__quadratic_parse_theta()
-            
-#         if mode == 'polynomial':
-#             self.__polynomial_parse_theta()
-            
             
     def __parse_theta(self): #need to change this in access files
         self.PR_kappa_A_comp_1_comp_2 = theta[0]
@@ -81,75 +56,6 @@ class PRModels:
         self.PR_kappa_D_comp_1_comp_2 = theta[6]
         self.PR_kappa_D_comp_2_comp_1 = theta[7]
         
-#     def __1param_Opt2_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = 0
-#         self.PR_kappa_A_comp_2_comp_1 = theta[0]
-#         self.PR_kappa_B_comp_1_comp_2 = 0
-#         self.PR_kappa_B_comp_2_comp_1 = 0
-#         self.PR_kappa_C_comp_1_comp_2 = 0
-#         self.PR_kappa_C_comp_2_comp_1 = 0
-#         self.PR_kappa_D_comp_1_comp_2 = 0
-#         self.PR_kappa_D_comp_2_comp_1 = 0
-    
-#     def __constant_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = theta[]
-#         self.PR_kappa_A_comp_2_comp_1 = theta[]
-#         self.PR_kappa_B_comp_1_comp_2 = 0
-#         self.PR_kappa_B_comp_2_comp_1 = 0
-#         self.PR_kappa_C_comp_1_comp_2 = 0
-#         self.PR_kappa_C_comp_2_comp_1 = 0
-#         self.PR_kappa_D_comp_1_comp_2 = 0
-#         self.PR_kappa_D_comp_2_comp_1 = 0
-        
-#     def __3params_Opt1_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = theta[]
-#         self.PR_kappa_A_comp_2_comp_1 = theta[]
-#         self.PR_kappa_B_comp_1_comp_2 = theta[]
-#         self.PR_kappa_B_comp_2_comp_1 = 0
-#         self.PR_kappa_C_comp_1_comp_2 = 0
-#         self.PR_kappa_C_comp_2_comp_1 = 0
-#         self.PR_kappa_D_comp_1_comp_2 = 0
-#         self.PR_kappa_D_comp_2_comp_1 = 0
-        
-#     def __3params_Opt2_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = theta[]
-#         self.PR_kappa_A_comp_2_comp_1 = theta[]
-#         self.PR_kappa_B_comp_1_comp_2 = 0
-#         self.PR_kappa_B_comp_2_comp_1 = theta[]
-#         self.PR_kappa_C_comp_1_comp_2 = 0
-#         self.PR_kappa_C_comp_2_comp_1 = 0
-#         self.PR_kappa_D_comp_1_comp_2 = 0
-#         self.PR_kappa_D_comp_2_comp_1 = 0
-        
-#     def __linear_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = theta[]
-#         self.PR_kappa_A_comp_2_comp_1 = theta[]
-#         self.PR_kappa_B_comp_1_comp_2 = theta[]
-#         self.PR_kappa_B_comp_2_comp_1 = theta[]
-#         self.PR_kappa_C_comp_1_comp_2 = 0
-#         self.PR_kappa_C_comp_2_comp_1 = 0
-#         self.PR_kappa_D_comp_1_comp_2 = 0
-#         self.PR_kappa_D_comp_2_comp_1 = 0
-        
-#     def __quadratic_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = theta[]
-#         self.PR_kappa_A_comp_2_comp_1 = theta[]
-#         self.PR_kappa_B_comp_1_comp_2 = theta[]
-#         self.PR_kappa_B_comp_2_comp_1 = theta[]
-#         self.PR_kappa_C_comp_1_comp_2 = theta[]
-#         self.PR_kappa_C_comp_2_comp_1 = theta[]
-#         self.PR_kappa_D_comp_1_comp_2 = 0
-#         self.PR_kappa_D_comp_2_comp_1 = 0
-        
-#     def __polynomial_parse_theta(self):
-#         self.PR_kappa_A_comp_1_comp_2 = theta[]
-#         self.PR_kappa_A_comp_2_comp_1 = theta[]
-#         self.PR_kappa_B_comp_1_comp_2 = theta[]
-#         self.PR_kappa_B_comp_2_comp_1 = theta[]
-#         self.PR_kappa_C_comp_1_comp_2 = theta[]
-#         self.PR_kappa_C_comp_2_comp_1 = theta[]
-#         self.PR_kappa_D_comp_1_comp_2 = theta[]
-#         self.PR_kappa_D_comp_2_comp_1 = theta[]
         
     def create_model(data):
         '''
@@ -160,35 +66,35 @@ class PRModels:
 
         m.fs = FlowsheetBlock(default={"dynamic": False})
 
-        m.fs.properties = GenericParameterBlock(default=configuration)
+        m.fs.properties = GenericParameterBlock(default=self.configuration)
 
         m.fs.state_block = m.fs.properties.state_block_class(
             default={"parameters": m.fs.properties,
                      "defined_state": True})
-        x = float(data[x_comp_1])+eps
+        x = float(data[self.x_comp_1])+eps
         m.fs.state_block.flow_mol.fix(1)
         m.fs.state_block.temperature.fix(float(data["temperature"]))
         m.fs.state_block.pressure.fix(float(data["pressure"]))
-        m.fs.state_block.mole_frac_comp[comp_2].fix(1-x)
-        m.fs.state_block.mole_frac_comp[comp_1].fix(x)
+        m.fs.state_block.mole_frac_comp[self.comp_2].fix(1-x)
+        m.fs.state_block.mole_frac_comp[self.comp_1].fix(x)
 
         # parameters
-        m.fs.properties.PR_kappa_A[comp_2, comp_2].fix(0)
-        m.fs.properties.PR_kappa_A[comp_2, comp_1].fix(PR_kappa_A_comp_2_comp_1)
-        m.fs.properties.PR_kappa_A[comp_1, comp_1].fix(0)
-        m.fs.properties.PR_kappa_A[comp_1, comp_2].fix(PR_kappa_A_comp_1_comp_2)
-        m.fs.properties.PR_kappa_B[comp_2, comp_2].fix(0)
-        m.fs.properties.PR_kappa_B[comp_2, comp_1].fix(PR_kappa_B_comp_2_comp_1)
-        m.fs.properties.PR_kappa_B[comp_1, comp_1].fix(0)
-        m.fs.properties.PR_kappa_B[comp_1, comp_2].fix(PR_kappa_B_comp_1_comp_2)
-        m.fs.properties.PR_kappa_C[comp_2, comp_2].fix(0)
-        m.fs.properties.PR_kappa_C[comp_2, comp_1].fix(PR_kappa_C_comp_2_comp_1)
-        m.fs.properties.PR_kappa_C[comp_1, comp_1].fix(0)
-        m.fs.properties.PR_kappa_C[comp_1, comp_2].fix(PR_kappa_C_comp_1_comp_2)
-        m.fs.properties.PR_kappa_D[comp_2, comp_2].fix(0)
-        m.fs.properties.PR_kappa_D[comp_2, comp_1].fix(PR_kappa_D_comp_2_comp_1)
-        m.fs.properties.PR_kappa_D[comp_1, comp_1].fix(0)
-        m.fs.properties.PR_kappa_D[comp_1, comp_2].fix(PR_kappa_D_comp_1_comp_2)
+        m.fs.properties.PR_kappa_A[self.comp_2, self.comp_2].fix(0)
+        m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].fix(self.PR_kappa_A_comp_2_comp_1)
+        m.fs.properties.PR_kappa_A[self.comp_1, self.comp_1].fix(0)
+        m.fs.properties.PR_kappa_A[self.comp_1, self.comp_2].fix(self.PR_kappa_A_comp_1_comp_2)
+        m.fs.properties.PR_kappa_B[self.comp_2, self.comp_2].fix(0)
+        m.fs.properties.PR_kappa_B[self.comp_2, self.comp_1].fix(self.PR_kappa_B_comp_2_comp_1)
+        m.fs.properties.PR_kappa_B[self.comp_1, self.comp_1].fix(0)
+        m.fs.properties.PR_kappa_B[self.comp_1, self.comp_2].fix(self.PR_kappa_B_comp_1_comp_2)
+        m.fs.properties.PR_kappa_C[self.comp_2, self.comp_2].fix(0)
+        m.fs.properties.PR_kappa_C[self.comp_2, self.comp_1].fix(self.PR_kappa_C_comp_2_comp_1)
+        m.fs.properties.PR_kappa_C[self.comp_1, self.comp_1].fix(0)
+        m.fs.properties.PR_kappa_C[self.comp_1, self.comp_2].fix(self.PR_kappa_C_comp_1_comp_2)
+        m.fs.properties.PR_kappa_D[self.comp_2, self.comp_2].fix(0)
+        m.fs.properties.PR_kappa_D[self.comp_2, self.comp_1].fix(self.PR_kappa_D_comp_2_comp_1)
+        m.fs.properties.PR_kappa_D[self.comp_1, self.comp_1].fix(0)
+        m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].fix(self.PR_kappa_D_comp_1_comp_2)
 
         # Initialize the flash unit
 #         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
@@ -196,39 +102,39 @@ class PRModels:
 
         # Fix the state variables on the state block
         m.fs.state_block.pressure.unfix()
-        m.fs.state_block.mole_frac_comp[comp_2].unfix()
-        m.fs.state_block.mole_frac_comp[comp_1].unfix()
+        m.fs.state_block.mole_frac_comp[self.comp_2].unfix()
+        m.fs.state_block.mole_frac_comp[self.comp_1].unfix()
         m.fs.state_block.temperature.fix(float(data["temperature"]))
-        m.fs.state_block.mole_frac_phase_comp['Liq', comp_1].fix(float(data[x_comp_1]))
-        m.fs.state_block.mole_frac_phase_comp['Liq', comp_2].fix(float(data[x_comp_2]))
-        m.fs.state_block.mole_frac_comp[comp_1].fix(float(data[x_comp_1])+eps)
-        m.fs.state_block.mole_frac_comp[comp_2].unfix()
+        m.fs.state_block.mole_frac_phase_comp['Liq', self.comp_1].fix(float(data[self.x_comp_1]))
+        m.fs.state_block.mole_frac_phase_comp['Liq', self.comp_2].fix(float(data[self.x_comp_2]))
+        m.fs.state_block.mole_frac_comp[self.comp_1].fix(float(data[self.x_comp_1])+eps)
+        m.fs.state_block.mole_frac_comp[self.comp_2].unfix()
 
 
         # Set bounds on variables to be estimated
-        m.fs.properties.PR_kappa_A[comp_2, comp_1].setlb(-20)
-        m.fs.properties.PR_kappa_A[comp_2, comp_1].setub(20)
+        m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].setlb(-20)
+        m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].setub(20)
 
-        m.fs.properties.PR_kappa_A[comp_1, comp_2].setlb(-20)
-        m.fs.properties.PR_kappa_A[comp_1, comp_2].setub(20)
+        m.fs.properties.PR_kappa_A[self.comp_1, self.comp_2].setlb(-20)
+        m.fs.properties.PR_kappa_A[self.comp_1, self.comp_2].setub(20)
 
-        m.fs.properties.PR_kappa_B[comp_2, comp_1].setlb(-20)
-        m.fs.properties.PR_kappa_B[comp_2, comp_1].setub(20)
+        m.fs.properties.PR_kappa_B[self.comp_2, self.comp_1].setlb(-20)
+        m.fs.properties.PR_kappa_B[self.comp_2, self.comp_1].setub(20)
 
-        m.fs.properties.PR_kappa_B[comp_1, comp_2].setlb(-20)
-        m.fs.properties.PR_kappa_B[comp_1, comp_2].setub(20)
+        m.fs.properties.PR_kappa_B[self.comp_1, self.comp_2].setlb(-20)
+        m.fs.properties.PR_kappa_B[self.comp_1, self.comp_2].setub(20)
 
-        m.fs.properties.PR_kappa_C[comp_2, comp_1].setlb(-20)
-        m.fs.properties.PR_kappa_C[comp_2, comp_1].setub(20)
+        m.fs.properties.PR_kappa_C[self.comp_2, self.comp_1].setlb(-20)
+        m.fs.properties.PR_kappa_C[self.comp_2, self.comp_1].setub(20)
 
-        m.fs.properties.PR_kappa_C[comp_1, comp_2].setlb(-20)
-        m.fs.properties.PR_kappa_C[comp_1, comp_2].setub(20)
+        m.fs.properties.PR_kappa_C[self.comp_1, self.comp_2].setlb(-20)
+        m.fs.properties.PR_kappa_C[self.comp_1, self.comp_2].setub(20)
         
-        m.fs.properties.PR_kappa_D[comp_2, comp_1].setlb(-20)
-        m.fs.properties.PR_kappa_D[comp_2, comp_1].setub(20)
+        m.fs.properties.PR_kappa_D[self.comp_2, self.comp_1].setlb(-20)
+        m.fs.properties.PR_kappa_D[self.comp_2, self.comp_1].setub(20)
 
-        m.fs.properties.PR_kappa_D[comp_1, comp_2].setlb(-20)
-        m.fs.properties.PR_kappa_D[comp_1, comp_2].setub(20)
+        m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].setlb(-20)
+        m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].setub(20)
 
         # Return initialized flash model
         return m
