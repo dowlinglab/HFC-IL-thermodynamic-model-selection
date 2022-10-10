@@ -59,7 +59,7 @@ class PRModels:
         self.PR_kappa_D_comp_2_comp_1 = theta[7]
         
         
-    def create_model(self, data, eps=0.0):
+    def create_model(self, data, eps=0.0, polynomial = False):
         '''
         
         '''
@@ -80,23 +80,43 @@ class PRModels:
         m.fs.state_block.mole_frac_comp[self.comp_2].fix(1-x)
         m.fs.state_block.mole_frac_comp[self.comp_1].fix(x)
 
-        # parameters
-        m.fs.properties.PR_kappa_A[self.comp_2, self.comp_2].fix(0)
-        m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].fix(self.PR_kappa_A_comp_2_comp_1)
-        m.fs.properties.PR_kappa_A[self.comp_1, self.comp_1].fix(0)
-        m.fs.properties.PR_kappa_A[self.comp_1, self.comp_2].fix(self.PR_kappa_A_comp_1_comp_2)
-        m.fs.properties.PR_kappa_B[self.comp_2, self.comp_2].fix(0)
-        m.fs.properties.PR_kappa_B[self.comp_2, self.comp_1].fix(self.PR_kappa_B_comp_2_comp_1)
-        m.fs.properties.PR_kappa_B[self.comp_1, self.comp_1].fix(0)
-        m.fs.properties.PR_kappa_B[self.comp_1, self.comp_2].fix(self.PR_kappa_B_comp_1_comp_2)
-        m.fs.properties.PR_kappa_C[self.comp_2, self.comp_2].fix(0)
-        m.fs.properties.PR_kappa_C[self.comp_2, self.comp_1].fix(self.PR_kappa_C_comp_2_comp_1)
-        m.fs.properties.PR_kappa_C[self.comp_1, self.comp_1].fix(0)
-        m.fs.properties.PR_kappa_C[self.comp_1, self.comp_2].fix(self.PR_kappa_C_comp_1_comp_2)
-        m.fs.properties.PR_kappa_D[self.comp_2, self.comp_2].fix(0)
-        m.fs.properties.PR_kappa_D[self.comp_2, self.comp_1].fix(self.PR_kappa_D_comp_2_comp_1)
-        m.fs.properties.PR_kappa_D[self.comp_1, self.comp_1].fix(0)
-        m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].fix(self.PR_kappa_D_comp_1_comp_2)
+        if polynomial == False:
+            # parameters
+            m.fs.properties.PR_kappa_A[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].fix(self.PR_kappa_A_comp_2_comp_1)
+            m.fs.properties.PR_kappa_A[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_A[self.comp_1, self.comp_2].fix(self.PR_kappa_A_comp_1_comp_2)
+            m.fs.properties.PR_kappa_B[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_B[self.comp_2, self.comp_1].fix(self.PR_kappa_B_comp_2_comp_1)
+            m.fs.properties.PR_kappa_B[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_B[self.comp_1, self.comp_2].fix(self.PR_kappa_B_comp_1_comp_2)
+            m.fs.properties.PR_kappa_C[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_C[self.comp_2, self.comp_1].fix(self.PR_kappa_C_comp_2_comp_1)
+            m.fs.properties.PR_kappa_C[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_C[self.comp_1, self.comp_2].fix(self.PR_kappa_C_comp_1_comp_2)
+#             m.fs.properties.PR_kappa_D[self.comp_2, self.comp_2].fix(0)
+#             m.fs.properties.PR_kappa_D[self.comp_2, self.comp_1].fix(self.PR_kappa_D_comp_2_comp_1)
+#             m.fs.properties.PR_kappa_D[self.comp_1, self.comp_1].fix(0)
+#             m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].fix(self.PR_kappa_D_comp_1_comp_2)
+            
+        else:
+            # parameters
+            m.fs.properties.PR_kappa_A[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].fix(self.PR_kappa_A_comp_2_comp_1)
+            m.fs.properties.PR_kappa_A[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_A[self.comp_1, self.comp_2].fix(self.PR_kappa_A_comp_1_comp_2)
+            m.fs.properties.PR_kappa_B[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_B[self.comp_2, self.comp_1].fix(self.PR_kappa_B_comp_2_comp_1)
+            m.fs.properties.PR_kappa_B[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_B[self.comp_1, self.comp_2].fix(self.PR_kappa_B_comp_1_comp_2)
+            m.fs.properties.PR_kappa_C[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_C[self.comp_2, self.comp_1].fix(self.PR_kappa_C_comp_2_comp_1)
+            m.fs.properties.PR_kappa_C[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_C[self.comp_1, self.comp_2].fix(self.PR_kappa_C_comp_1_comp_2)
+            m.fs.properties.PR_kappa_D[self.comp_2, self.comp_2].fix(0)
+            m.fs.properties.PR_kappa_D[self.comp_2, self.comp_1].fix(self.PR_kappa_D_comp_2_comp_1)
+            m.fs.properties.PR_kappa_D[self.comp_1, self.comp_1].fix(0)
+            m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].fix(self.PR_kappa_D_comp_1_comp_2)
 
         # Initialize the flash unit
 #         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
