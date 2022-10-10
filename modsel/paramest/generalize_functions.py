@@ -45,8 +45,10 @@ class PRModels:
         self.x_comp_1 = x_comp_1
         self.x_comp_2 = x_comp_2
         
+        self.__parse_theta(theta)
+        
             
-    def __parse_theta(self): #need to change this in access files
+    def __parse_theta(self, theta): #need to change this in access files
         self.PR_kappa_A_comp_1_comp_2 = theta[0]
         self.PR_kappa_A_comp_2_comp_1 = theta[1]
         self.PR_kappa_B_comp_1_comp_2 = theta[2]
@@ -57,7 +59,7 @@ class PRModels:
         self.PR_kappa_D_comp_2_comp_1 = theta[7]
         
         
-    def create_model(data):
+    def create_model(self, data, eps=0.0):
         '''
         
         '''
