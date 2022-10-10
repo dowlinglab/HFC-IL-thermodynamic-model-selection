@@ -119,7 +119,7 @@ class PRModels:
             m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].fix(self.PR_kappa_D_comp_1_comp_2)
 
         # Initialize the flash unit
-#         m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
+        #m.fs.state_block.initialize(outlvl=idaeslog.CRITICAL)
         m.fs.state_block.initialize(outlvl=50)
 
         # Fix the state variables on the state block
