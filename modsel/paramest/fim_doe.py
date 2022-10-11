@@ -992,8 +992,8 @@ class DesignOfExperiments:
 
             # loop over measurement variables and their time points
             #for measurement_name in self.measure.model_measure_name_kaug:
-            #for measurement_name in ['fs.state_block.pressure']:
-            for measurement_name in ['fs.F101.control_volume.properties_out[0.0].pressure']:
+            for measurement_name in ['fs.state_block.pressure']:
+            #for measurement_name in ['fs.F101.control_volume.properties_out[0.0].pressure']:
                 # get right line number in kaug results
                 print('name:', measurement_name)
                 if self.discretize_model is not None:
@@ -1027,7 +1027,7 @@ class DesignOfExperiments:
                 for p, par in enumerate(self.param_name):
                     # if scaled by parameter value or constant value
                     if self.scale_nominal_param_value:
-                        jac[par].append(self.param_init[par]*dsdp_extract[d][p]*self.scale_constant_value)
+                        jac[par].append(abs(self.param_init[par])*dsdp_extract[d][p]*self.scale_constant_value)
                     else:
                         jac[par].append(dsdp_extract[d][p]*self.scale_constant_value)
 

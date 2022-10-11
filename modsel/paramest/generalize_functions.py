@@ -28,9 +28,13 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 class PRModels:
     def __init__(self, theta, configuration, comp_1, comp_2, x_comp_1, x_comp_2):
         '''
+        TODO:  add model name as input
+        theta: pandas DF 
+        
         To run a PR model, you need:
         
-        theta: parameters dataframe (to initialize or already fit)
+        
+        theta: parameters dataframe (to initialize or already fit) 
         configuration: file with information on the system and model
         comp_1: component 1
         comp_2: component 2
@@ -45,10 +49,16 @@ class PRModels:
         self.x_comp_1 = x_comp_1
         self.x_comp_2 = x_comp_2
         
+        # check file or vector here.
         self.__parse_theta(theta)
         
-            
+    def __parse_theta_csv(self, file_name):
+        return 
+        
     def __parse_theta(self, theta): #need to change this in access files
+        
+        
+        
         self.PR_kappa_A_comp_1_comp_2 = theta[0]
         self.PR_kappa_A_comp_2_comp_1 = theta[1]
         self.PR_kappa_B_comp_1_comp_2 = theta[2]
@@ -57,6 +67,9 @@ class PRModels:
         self.PR_kappa_C_comp_2_comp_1 = theta[5]
         self.PR_kappa_D_comp_1_comp_2 = theta[6]
         self.PR_kappa_D_comp_2_comp_1 = theta[7]
+        
+        
+    # TODO: get parameter names 
         
         
     def create_model(self, data, eps=0.0, polynomial = False):
@@ -134,6 +147,7 @@ class PRModels:
 
 
         # Set bounds on variables to be estimated
+        '''
         m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].setlb(-20)
         m.fs.properties.PR_kappa_A[self.comp_2, self.comp_1].setub(20)
 
@@ -157,6 +171,7 @@ class PRModels:
 
         m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].setlb(-20)
         m.fs.properties.PR_kappa_D[self.comp_1, self.comp_2].setub(20)
+        '''
 
         # Return initialized flash model
         return m
