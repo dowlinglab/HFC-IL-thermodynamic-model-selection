@@ -28,13 +28,11 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 class PRModels:
     def __init__(self, theta, configuration, comp_1, comp_2, x_comp_1, x_comp_2, PR_type='1Param_Opt1'):
         '''
-        TODO:  add model name as input
-        theta: pandas DF 
-        
         To run a PR model, you need:
         
         
-        theta: parameters dataframe (to initialize or already fit) 
+        theta: either file or parameters dataframe (to initialize or already fit)
+        PR_type: a string of PR model name
         configuration: file with information on the system and model
         comp_1: component 1
         comp_2: component 2
@@ -49,15 +47,27 @@ class PRModels:
         self.x_comp_1 = x_comp_1
         self.x_comp_2 = x_comp_2
         
-        # check file or vector here.
-        self.__parse_theta(theta)
+        self.PR_type = PR_type
         
-        self.__get_param_names(self, PR_type)
+        # check file or vector here.
+        if type(theta) is str: 
+            self.__parse_theta_csv(theta)
+        else:
+            self.__parse_theta(theta)
+        
+        self.__get_param_names()
         
     def __parse_theta_csv(self, file_name):
-        return 
         
-    def __parse_theta(self, theta): #need to change this in access files
+        params = pd.read_csv(file_name,header=None)
+
+        # all parameters for initialization
+        params_list = list(params[0])
+        
+        self.__parse_theta(params_list)
+        
+        
+    def __parse_theta(self, theta): 
         
         self.PR_kappa_A_comp_1_comp_2 = theta[0]
         self.PR_kappa_A_comp_2_comp_1 = theta[1]
@@ -69,36 +79,35 @@ class PRModels:
         self.PR_kappa_D_comp_2_comp_1 = theta[7]
         
         
-    # TODO: get parameter names 
-    def __get_param_names(self, PR_type):
+    def __get_param_names(self):
         
-        if PR_type == '1Param_Opt1':
+        if self.PR_type == '1Param_Opt1':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2}
             
-        elif PR_type == '1Param_Opt2':
+        elif self.PR_type == '1Param_Opt2':
             param_name_dict = { 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1}
         
-        elif PR_type == 'No':
+        elif self.PR_type == 'No':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
                                 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1}
         
-        elif PR_type == '3Params_Opt1':
+        elif self.PR_type == '3Params_Opt1':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
                                 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
                                 'fs.properties.PR_kappa_B["R32", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2}
             
-        elif PR_type == '3Params_Opt2':
+        elif self.PR_type == '3Params_Opt2':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
                                 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
                                 'fs.properties.PR_kappa_B["emimTf2N", "R32"]': self.PR_kappa_B_comp_2_comp_1}
             
-        elif PR_type == 'Linear':
+        elif self.PR_type == 'Linear':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
                                 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
                                 'fs.properties.PR_kappa_B["R32", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2,
                                 'fs.properties.PR_kappa_B["emimTf2N", "R32"]': self.PR_kappa_B_comp_2_comp_1}
             
-        elif PR_type == 'Quadratic':
+        elif self.PR_type == 'Quadratic':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
                                 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
                                 'fs.properties.PR_kappa_B["R32", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2,
@@ -106,7 +115,7 @@ class PRModels:
                                 'fs.properties.PR_kappa_C["R32", "emimTf2N"]': self.PR_kappa_C_comp_1_comp_2,
                                 'fs.properties.PR_kappa_C["emimTf2N", "R32"]': self.PR_kappa_C_comp_2_comp_1}
             
-        elif PR_type == 'Polynomial':
+        elif self.PR_type == 'Polynomial':
             param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
                                 'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
                                 'fs.properties.PR_kappa_B["R32", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2,
@@ -115,6 +124,8 @@ class PRModels:
                                 'fs.properties.PR_kappa_C["emimTf2N", "R32"]': self.PR_kappa_C_comp_2_comp_1,
                                 'fs.properties.PR_kappa_D["R32", "emimTf2N"]': self.PR_kappa_D_comp_1_comp_2,
                                 'fs.properties.PR_kappa_D["emimTf2N", "R32"]': self.PR_kappa_D_comp_2_comp_1}
+            
+        self.param_name_dict = param_name_dict
 
         
     def create_model(self, data, eps=0.0, polynomial = False):

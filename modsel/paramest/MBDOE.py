@@ -24,81 +24,55 @@ from generalize_functions import PRModels
 
 
 class MBDOE: 
-    def __init__(self, data_file, PR_model, verbose=True):
+    def __init__(self, data_file, create_model, verbose=True):
         '''
         data_file: csv file including all design variables
+        create_model: model object
         '''
         
         self.data_exp = pd.read_csv(data_file)
+        self.create_model_object = create_model
         self.verbose = verbose
         
-        
-    def __read_param(self, param_file, param_name_dict):
-        '''
-        param_file: csv file including all parameter values 
-        '''
-        params = pd.read_csv(param_file,header=None)
-
-        # all parameters for initialization
-        self.params_list = list(params[0])
-        
-        self.param_dict = {}
-        
-        for name in param_name_dict:
-            self.param_dict[name] = self.params_list[param_name_dict[name]]
+        # get parameter information
+        self.param_dict = self.create_model_object.param_name_dict
+        # param names
+        self.param_name = list(self.param_dict.keys())
         
         if self.verbose:
             print("parameter set:", self.param_dict)
         
         
-    def __create_model(self, design_var):
-        ''' 
-        design_var: an integer, indicating which line in data_exp is the design vector for this model
-        '''   
-        # this line goes to user input
-        model_creation = PRModels(self.params_list, configuration, 
-                         comp_1= "R32", comp_2 = "emimTf2N", 
-                         x_comp_1="x_R32", x_comp_2="x_emimTf2N")
+    def sumDOE(self, exp_idx_set):
         
-        # add a function
-        mod = model_creation.create_model(self.data_exp.iloc[design_var])
-        
-        self.mod = mod
-        
-    def compute_FIM_many_exp(self, param_file, design_var_set, param_name_dict):
-        
-        num_param = len(param_name_dict.keys())
+        num_param = len(self.param_name)
         
         totalFIM = [[0]*num_param for i in range(num_param)]
         
-        for i in design_var_set:
-            res = self.doe(param_file, i, param_name_dict)
+        for i in exp_idx_set:
+            res = self.doe(i)
             
             totalFIM += res.FIM
             
             
-        #if self.verbose: 
-        #    print('======Result summary======')
-        #    print('Four design criteria log10() value:')
-        #    print('A-optimality:', np.log10(result.trace))
-        #    print('D-optimality:', np.log10(result.det))
-        #    print('E-optimality:', np.log10(result.min_eig))
-        #    print('Modified E-optimality:', np.log10(result.cond))
+        if self.verbose: 
+            print('======Result summary======')
+            print('Four design criteria log10() value:')
+            print('A-optimality:', np.log10(np.trace(totalFIM)))
+            print('D-optimality:', np.log10(np.linalg.det(totalFIM)))
+            print('E-optimality:', np.log10(np.linalg.eigvals(totalFIM)))
+            print('Modified E-optimality:', np.log10(np.linalg.cond(totalFIM)))
             
         return totalFIM
 
         
-    def compute_FIM_single_exp(self, param_file, design_var, param_name_dict):
+    def doe(self, exp_idx):
         '''
         param_file: csv file including all parameter values 
-        design_var: an integer, indicating which line in data_exp is the design vector for this model # TODO: change name to exp_idx
+        exp_idx: an integer, indicating which line in data_exp is the design vector for this model
         '''
         
-        self.__read_param(param_file, param_name_dict)
-        
-        self.__create_model(design_var)
-        
-        createmod = self.mod
+        createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx])
         
         # Control time set [h]
         t_control = [0]
@@ -143,7 +117,7 @@ class MBDOE:
         # compute FIM for a square MBDOE problem
         # Note that I did not scale the Jacobian 
         result = doe_object.compute_FIM(exp1, mode=sensi_opt, FIM_store_name = 'thermo.csv', 
-                                        scale_nominal_param_value=True, 
+                                        scale_nominal_param_value=False, 
                                         store_output = 'store_output', read_output=None,
                                         formula='central')
 
