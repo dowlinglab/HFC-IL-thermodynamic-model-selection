@@ -43,18 +43,26 @@ class MBDOE:
             print("parameter set:", self.param_dict)
         
         
-    def sumDOE(self, exp_idx_set):
+    def sumDOE(self, exp_idx_set, scale_opt=False):
         
         num_param = len(self.param_name)
         
         totalFIM = [[0]*num_param for i in range(num_param)]
         
+        failed_set = []
+        
         for i in exp_idx_set:
-            res = self.doe(i)
+            print("==========Experiment index:", i, "===============")
+            try:
+                res = self.doe(i, scale=scale_opt)
             
-            totalFIM += res.FIM
+                totalFIM += res.FIM
+            except:
+                failed_set.append(i)
+                print("Failure initialization!")
             
             
+        print("Failed set:", failed_set)
         if self.verbose: 
             print('======Result summary======')
             print('Four design criteria log10() value:')
@@ -66,11 +74,12 @@ class MBDOE:
         return totalFIM
 
         
-    def doe(self, exp_idx):
+    def doe(self, exp_idx, scale=False):
         '''
         param_file: csv file including all parameter values 
         exp_idx: an integer, indicating which line in data_exp is the design vector for this model
         '''
+        
         
         createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx])
         
@@ -117,7 +126,7 @@ class MBDOE:
         # compute FIM for a square MBDOE problem
         # Note that I did not scale the Jacobian 
         result = doe_object.compute_FIM(exp1, mode=sensi_opt, FIM_store_name = 'thermo.csv', 
-                                        scale_nominal_param_value=False, 
+                                        scale_nominal_param_value=scale, 
                                         store_output = 'store_output', read_output=None,
                                         formula='central')
 
