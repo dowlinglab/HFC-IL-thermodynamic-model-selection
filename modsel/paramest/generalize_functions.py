@@ -128,7 +128,8 @@ class PRModels:
         self.param_name_dict = param_name_dict
 
         
-    def create_model(self, data, eps=0.0, polynomial = False):
+    def create_model(self, data, eps=0.0, 
+                     init_temp = 283.1, init_pressure = 399300 , init_x_c1 = 0.45, polynomial = False):
         '''
         
         '''
@@ -142,10 +143,10 @@ class PRModels:
         m.fs.state_block = m.fs.properties.state_block_class(
             default={"parameters": m.fs.properties,
                      "defined_state": True})
-        x = float(data[self.x_comp_1])+eps
+        x = float(init_x_c1)+eps
         m.fs.state_block.flow_mol.fix(1)
-        m.fs.state_block.temperature.fix(float(data["temperature"]))
-        m.fs.state_block.pressure.fix(float(data["pressure"]))
+        m.fs.state_block.temperature.fix(init_temp)
+        m.fs.state_block.pressure.fix(init_pressure)
         m.fs.state_block.mole_frac_comp[self.comp_2].fix(1-x)
         m.fs.state_block.mole_frac_comp[self.comp_1].fix(x)
 
