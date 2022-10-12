@@ -27,7 +27,7 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 # Setup class for PR, SRK models
 class CEOSModels:
     def __init__(self, theta, configuration, comp_1, comp_2, x_comp_1, x_comp_2, 
-                 init_temp = 283.1, init_pressure = 399300, init_x_c1 = 0.45, Model_type = 'PR', Tdep_type='1Param_Opt1'):
+                  Model_type = 'PR', Tdep_type='1Param_Opt1'):
         '''
         To run a CEOS model, you need:
         
@@ -52,9 +52,9 @@ class CEOSModels:
         self.x_comp_1 = x_comp_1
         self.x_comp_2 = x_comp_2
         
-        self.init_temp = init_temp
-        self.init_pressure = init_pressure
-        self.init_x_c1 = init_x_c1
+        #self.init_temp = init_temp
+        #self.init_pressure = init_pressure
+        #self.init_x_c1 = init_x_c1
         
         self.Model_type = Model_type
         
@@ -80,14 +80,28 @@ class CEOSModels:
         
     def __parse_theta(self, theta): 
         
-        self.PR_kappa_A_comp_1_comp_2 = theta[0]
-        self.PR_kappa_A_comp_2_comp_1 = theta[1]
-        self.PR_kappa_B_comp_1_comp_2 = theta[2]
-        self.PR_kappa_B_comp_2_comp_1 = theta[3]
-        self.PR_kappa_C_comp_1_comp_2 = theta[4]
-        self.PR_kappa_C_comp_2_comp_1 = theta[5]
-        self.PR_kappa_D_comp_1_comp_2 = theta[6]
-        self.PR_kappa_D_comp_2_comp_1 = theta[7]
+        if self.Model_type == "PR":
+            self.PR_kappa_A_comp_1_comp_2 = theta[0]
+            self.PR_kappa_A_comp_2_comp_1 = theta[1]
+            self.PR_kappa_B_comp_1_comp_2 = theta[2]
+            self.PR_kappa_B_comp_2_comp_1 = theta[3]
+            self.PR_kappa_C_comp_1_comp_2 = theta[4]
+            self.PR_kappa_C_comp_2_comp_1 = theta[5]
+            self.PR_kappa_D_comp_1_comp_2 = theta[6]
+            self.PR_kappa_D_comp_2_comp_1 = theta[7]
+            
+        elif self.Model_type == "SRK":
+            self.SRK_kappa_A_comp_1_comp_2 = theta[0]
+            self.SRK_kappa_A_comp_2_comp_1 = theta[1]
+            self.SRK_kappa_B_comp_1_comp_2 = theta[2]
+            self.SRK_kappa_B_comp_2_comp_1 = theta[3]
+            self.SRK_kappa_C_comp_1_comp_2 = theta[4]
+            self.SRK_kappa_C_comp_2_comp_1 = theta[5]
+            self.SRK_kappa_D_comp_1_comp_2 = theta[6]
+            self.SRK_kappa_D_comp_2_comp_1 = theta[7]
+            
+        else:
+            print("Wrong model type.")
         
         
     def __get_param_names(self):
@@ -137,7 +151,7 @@ class CEOSModels:
                                     'fs.properties.PR_kappa_D["R32", "emimTf2N"]': self.PR_kappa_D_comp_1_comp_2,
                                     'fs.properties.PR_kappa_D["emimTf2N", "R32"]': self.PR_kappa_D_comp_2_comp_1}
                 
-        elif self.Model_type == 'SRK'
+        elif self.Model_type == 'SRK':
             
             if self.Tdep_type == '1Param_Opt1':
                 param_name_dict = { 'fs.properties.SRK_kappa_A["R32", "emimTf2N"]': self.SRK_kappa_A_comp_1_comp_2}
@@ -188,7 +202,7 @@ class CEOSModels:
 
         
     def create_model(self, data, eps=0.0, 
-                     init = None, polynomial = False):
+                     init_temp = 283.1, init_pressure = 399300, init_x_c1 = 0.45, polynomial = False):
         '''
         
         '''
@@ -203,12 +217,12 @@ class CEOSModels:
             default={"parameters": m.fs.properties,
                      "defined_state": True})
         
-        if init = None:
-            init_x_c1 = self.init_x_c1
+        #if not init:
+        #    init_x_c1 = self.init_x_c1
             
-            init_temp = self.init_temp
+        #    init_temp = self.init_temp
             
-            init_pressure = self.init_pressure
+        #    init_pressure = self.init_pressure
         
         x = float(init_x_c1)+eps
         m.fs.state_block.flow_mol.fix(1)

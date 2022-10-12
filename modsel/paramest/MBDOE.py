@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd 
 import idaes
 import scipy.stats as stats
+import json
 
 # import pyomo.doe
 from fim_doe import *
@@ -20,7 +21,7 @@ from idaes.core.util.model_statistics import degrees_of_freedom
 # Import configuration
 from hfc32_emimtf2n_PR import configuration 
 
-from generalize_functions import PRModels
+from generalize_functions import CEOSModels
 
 
 class MBDOE: 
@@ -43,7 +44,7 @@ class MBDOE:
             print("parameter set:", self.param_dict)
         
         
-    def sumDOE(self, exp_idx_set, scale_opt=False):
+    def sumDOE(self, exp_idx_set, scale_opt=False, record_name=None,  init_temp_option = 283.1, init_pressure_option = 399300 , init_x_c1_option = 0.45):
         
         num_param = len(self.param_name)
         
@@ -51,16 +52,31 @@ class MBDOE:
         
         failed_set = []
         
+        record = {}
+        record["model_name"] = record_name
+        
         for i in exp_idx_set:
             print("==========Experiment index:", i, "===============")
-            try:
-                res = self.doe(i, scale=scale_opt)
             
-                totalFIM += res.FIM
-            except:
-                failed_set.append(i)
-                print("Failure initialization!")
+            res = self.doe(i, scale=scale_opt, init_temp_opt = init_temp_option, 
+                          init_pressure_opt = init_pressure_option, init_x_c1_opt = init_x_c1_option)
             
+            record[str(i)] = res.FIM.tolist()
+            
+            totalFIM += res.FIM
+            #except:
+                #failed_set.append(i)
+                #print("Failure initialization!")
+        
+        
+        # record
+        record["Total"] = totalFIM.tolist()
+        record = [record]
+        print(record)
+        file_name = json.dumps(record)
+        f1 = open('./emimtf2n_FIM_info/'+record_name+".json", 'w')
+        f1.write(file_name)
+        f1.close()
             
         print("Failed set:", failed_set)
         if self.verbose: 
@@ -68,20 +84,21 @@ class MBDOE:
             print('Four design criteria log10() value:')
             print('A-optimality:', np.log10(np.trace(totalFIM)))
             print('D-optimality:', np.log10(np.linalg.det(totalFIM)))
-            print('E-optimality:', np.log10(np.linalg.eigvals(totalFIM)))
+            print('E-optimality:', np.log10(min(np.linalg.eigvals(totalFIM))))
             print('Modified E-optimality:', np.log10(np.linalg.cond(totalFIM)))
             
         return totalFIM
 
         
-    def doe(self, exp_idx, scale=False):
+    def doe(self, exp_idx, scale=False, init_temp_opt = 283.1, init_pressure_opt = 399300 , init_x_c1_opt = 0.45):
         '''
         param_file: csv file including all parameter values 
         exp_idx: an integer, indicating which line in data_exp is the design vector for this model
         '''
         
         
-        createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx])
+        createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx], init_temp=init_temp_opt,
+                                                         init_pressure = init_pressure_opt, init_x_c1 = init_x_c1_opt)
         
         # Control time set [h]
         t_control = [0]
