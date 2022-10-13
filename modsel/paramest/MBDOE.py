@@ -17,9 +17,7 @@ from idaes.generic_models.properties.core.generic.generic_property import (
 from idaes.generic_models.unit_models import Flash
 # Import degrees of freedom tool
 from idaes.core.util.model_statistics import degrees_of_freedom
-
-# Import configuration
-from hfc32_emimtf2n_PR import configuration 
+ 
 
 from generalize_functions import CEOSModels
 
