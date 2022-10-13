@@ -44,7 +44,7 @@ class MBDOE:
             print("parameter set:", self.param_dict)
         
         
-    def sumDOE(self, exp_idx_set, scale_opt=False, record_name=None,  init_temp_option = 283.1, init_pressure_option = 399300 , init_x_c1_option = 0.45):
+    def sumDOE(self, exp_idx_set, scale_opt=False, record_name=None,  init_temp_option = 283.1, init_pressure_option = 399300 , init_x_c1_option = 0.45, poly_option=False):
         
         num_param = len(self.param_name)
         
@@ -59,7 +59,7 @@ class MBDOE:
             print("==========Experiment index:", i, "===============")
             
             res = self.doe(i, scale=scale_opt, init_temp_opt = init_temp_option, 
-                          init_pressure_opt = init_pressure_option, init_x_c1_opt = init_x_c1_option)
+                          init_pressure_opt = init_pressure_option, init_x_c1_opt = init_x_c1_option, poly_opt = poly_option)
             
             record[str(i)] = res.FIM.tolist()
             
@@ -90,7 +90,7 @@ class MBDOE:
         return totalFIM
 
         
-    def doe(self, exp_idx, scale=False, init_temp_opt = 283.1, init_pressure_opt = 399300 , init_x_c1_opt = 0.45):
+    def doe(self, exp_idx, scale=False, init_temp_opt = 283.1, init_pressure_opt = 399300 , init_x_c1_opt = 0.45, poly_opt=False):
         '''
         param_file: csv file including all parameter values 
         exp_idx: an integer, indicating which line in data_exp is the design vector for this model
@@ -98,7 +98,7 @@ class MBDOE:
         
         
         createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx], init_temp=init_temp_opt,
-                                                         init_pressure = init_pressure_opt, init_x_c1 = init_x_c1_opt)
+                                                         init_pressure = init_pressure_opt, init_x_c1 = init_x_c1_opt, polynomial=poly_opt)
         
         # Control time set [h]
         t_control = [0]
