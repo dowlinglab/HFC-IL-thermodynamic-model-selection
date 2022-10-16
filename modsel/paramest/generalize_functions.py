@@ -217,13 +217,6 @@ class CEOSModels:
             default={"parameters": m.fs.properties,
                      "defined_state": True})
         
-        #if not init:
-        #    init_x_c1 = self.init_x_c1
-            
-        #    init_temp = self.init_temp
-            
-        #    init_pressure = self.init_pressure
-        
         x = float(init_x_c1)+eps
         m.fs.state_block.flow_mol.fix(1)
         m.fs.state_block.temperature.fix(init_temp)

@@ -1249,9 +1249,7 @@ class DesignOfExperiments:
 
         return result_object_list, fim_list
 
-    def run_grid_search(self, design_values, design_ranges, design_dimension_names, design_control_time, mode='sequential_finite',
-                        tee_option=False, scale_nominal_param_value=False, scale_constant_value=1, store_name= None, read_name=None,
-                        filename=None, formula='central', step=0.001):
+    def run_grid_search(self, design_values, design_ranges, design_dimension_names, design_control_time, mode='sequential_finite',tee_option=False, scale_nominal_param_value=False, scale_constant_value=1, store_name= None, read_name=None,filename=None, formula='central', step=0.001):
         """Enumerate through full grid search for any number of design variables;
         solve square problems sequentially to compute FIMs.
         It calculates FIM with sensitivity information from four modes:
