@@ -579,7 +579,7 @@ class DesignOfExperiments:
 
             return analysis_square
 
-    def compute_FIM(self, design_values, mode='sequential_finite', FIM_store_name=None, specified_prior=None,
+    def compute_FIM(self, design_values, mode='sequential_finite', fixed_model_name=None, FIM_store_name=None, specified_prior=None,
                     tee_opt=True, scale_nominal_param_value=True, scale_constant_value=1,
                     store_output = None, read_output=None, extract_single_model=None,
                     formula='central', step=0.001,
@@ -921,7 +921,10 @@ class DesignOfExperiments:
             time0_build = time.time()
             #mod = self.create_model(scenario_all, args=self.args)
             #mod = self.create_model(self.param_value)
-            mod = self.create_model
+            if not fixed_model_name: 
+                mod = self.create_model
+            else:
+                mod = fixed_model_name
             time1_build = time.time()
             time_build = time1_build - time0_build
 
@@ -1249,7 +1252,7 @@ class DesignOfExperiments:
 
         return result_object_list, fim_list
 
-    def run_grid_search(self, design_values, design_ranges, design_dimension_names, design_control_time, mode='sequential_finite',tee_option=False, scale_nominal_param_value=False, scale_constant_value=1, store_name= None, read_name=None,filename=None, formula='central', step=0.001):
+    def run_grid_search(self, design_values, design_ranges, design_dimension_names, design_control_time, mode='sequential_finite', fixed_model_list=None, tee_option=False, scale_nominal_param_value=False, scale_constant_value=1, store_name= None, read_name=None,filename=None, formula='central', step=0.001):
         """Enumerate through full grid search for any number of design variables;
         solve square problems sequentially to compute FIMs.
         It calculates FIM with sensitivity information from four modes:
@@ -1270,6 +1273,8 @@ class DesignOfExperiments:
             a ``list`` of control time points that should be fixed to the values in dv_ranges
         mode:
             use mode='sequential_finite', 'sequential_sipopt', 'sequential_kaug', 'direct_kaug'
+        fixed_model_list:
+            if not None, inputs should be created Pyomo models with corresponding design variable values
         tee_option:
             if IPOPT console output is made
         scale_nominal_param_value:
@@ -1330,9 +1335,9 @@ class DesignOfExperiments:
             design_iter = copy.deepcopy(design_values)
 
             # update the controlled value of certain time points for certain design variables
-            for i in range(grid_dimension):
-                for v, value in enumerate(design_control_time[i]):
-                    design_iter[design_dimension_names[i]][value] = list(design_set_iter)[i]
+            #for i in range(grid_dimension):
+            #    for v, value in enumerate(design_control_time[i]):
+            #        design_iter[design_dimension_names[i]][value] = list(design_set_iter)[i]
 
             print('=======This is the ', count+1, 'th iteration=======')
             print('Design variable values of this iteration:', design_iter)
@@ -1349,7 +1354,8 @@ class DesignOfExperiments:
                 read_input_name = None
 
             # call compute_FIM to get FIM
-            try:
+            #try:
+            if not fixed_model_list:
                 result_iter = self.compute_FIM(design_iter, mode=mode,
                                                tee_opt=tee_option,
                                                scale_nominal_param_value=scale_nominal_param_value,
@@ -1357,32 +1363,46 @@ class DesignOfExperiments:
                                                store_output=store_output_name, read_output=read_input_name,
                                                #extract_single_model=extract3_v2,
                                                formula=formula, step=step)
-                if read_input_name is None:
-                    build_time_store.append(result_iter.build_time)
-                    solve_time_store.append(result_iter.solve_time)
+                
+                    
+                    
+            else: 
+                result_iter = self.compute_FIM(design_iter, mode=mode,
+                                               tee_opt=tee_option,
+                                               fixed_model_name= fixed_model_list[count],
+                                               scale_nominal_param_value=scale_nominal_param_value,
+                                               scale_constant_value = scale_constant_value,
+                                               store_output=store_output_name, read_output=read_input_name,
+                                               #extract_single_model=extract3_v2,
+                                               formula=formula, step=step)
+                
+            if read_input_name is None:
+                build_time_store.append(result_iter.build_time)
+                solve_time_store.append(result_iter.solve_time)
 
-                count += 1
+            count += 1
 
-                result_iter.calculate_FIM(self.design_values)
+            result_iter.calculate_FIM(self.design_values)
 
-                t_now = time.time()
+            t_now = time.time()
 
-                if self.verbose:
-                    # give run information at each iteration
-                    print('This is the ', count+1, ' run out of ', total_count, 'run.')
-                    print('The code has run %.04f seconds.'% (t_now-t_enumeration_begin))
-                    print('Estimated remaining time: %.4f seconds' % ((t_now-t_enumeration_begin)/(count+1)*(total_count-count-1)))
+            if self.verbose:
+                # give run information at each iteration
+                print('This is the ', count+1, ' run out of ', total_count, 'run.')
+                print('The code has run %.04f seconds.'% (t_now-t_enumeration_begin))
+                print('Estimated remaining time: %.4f seconds' % ((t_now-t_enumeration_begin)/(count+1)*(total_count-count-1)))
 
 
                 # the combined result object are organized as a dictionary, keys are a tuple of the design variable values, values are a result object
                 result_combine[tuple(design_set_iter)] = result_iter
+                
 
-            except:
-                print(':::::::::::ERROR: Cannot converge this run.::::::::::::')
-                count += 1
-                failed_count += 1
-                print('failed count:', failed_count)
-                result_combine[tuple(design_set_iter)] = None
+            #except:
+            #    print(':::::::::::ERROR: Cannot converge this run.::::::::::::')
+            #    count += 1
+            #    failed_count += 1
+            #    print('failed count:', failed_count)
+            #    result_combine[tuple(design_set_iter)] = None
 
         # For user's access
         self.all_fim = result_combine
@@ -2822,8 +2842,9 @@ class Grid_Search_Result:
         ba = plt.pyplot.colorbar(im)
         ba.set_label('log10(trace(FIM))')
         plt.pyplot.title(title_text + ' - A optimality')
-        plt.pyplot.show()
-
+        #plt.pyplot.show()
+        plt.pyplot.savefig('A.png')
+        
         # D-optimality
         fig = plt.pyplot.figure()
         plt.pyplot.rc('axes', titlesize=font_axes)
@@ -2843,8 +2864,9 @@ class Grid_Search_Result:
         ba = plt.pyplot.colorbar(im)
         ba.set_label('log10(det(FIM))')
         plt.pyplot.title(title_text + ' - D optimality')
-        plt.pyplot.show()
-
+        #plt.pyplot.show()
+        plt.pyplot.savefig('D.png')
+        
         # E-optimality
         fig = plt.pyplot.figure()
         plt.pyplot.rc('axes', titlesize=font_axes)
@@ -2864,8 +2886,9 @@ class Grid_Search_Result:
         ba = plt.pyplot.colorbar(im)
         ba.set_label('log10(minimal eig(FIM))')
         plt.pyplot.title(title_text + ' - E optimality')
-        plt.pyplot.show()
-
+        #plt.pyplot.show()
+        plt.pyplot.savefig('E.png')
+        
         # modified E-optimality
         fig = plt.pyplot.figure()
         plt.pyplot.rc('axes', titlesize=font_axes)
@@ -2885,8 +2908,8 @@ class Grid_Search_Result:
         ba = plt.pyplot.colorbar(im)
         ba.set_label('log10(cond(FIM))')
         plt.pyplot.title(title_text + ' - Modified E-optimality')
-        plt.pyplot.show()
-
+        #plt.pyplot.show()
+        plt.pyplot.savefig('ME.png')
     
 
     
