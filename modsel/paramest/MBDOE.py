@@ -160,7 +160,7 @@ class MBDOE:
         return result
     
     
-    def run_grid_search(self, design_range_values, fixed_models=None, prior_FIM=None, scale_opt=True):
+    def run_grid_search(self, design_range_values, fixed_models=None, prior_FIM=None, scale_opt=True, store_name="record"):
         
         #createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx], init_temp=init_temp_opt,
         #                                                 init_pressure = init_pressure_opt, init_x_c1 = init_x_c1_opt, polynomial=poly_opt)
@@ -222,7 +222,7 @@ class MBDOE:
         dv_apply_time = [[0],[0]]
 
         # fixed_model_list
-        all_fim = doe_object.run_grid_search(exp1, design_ranges, dv_apply_name, dv_apply_time, mode='direct_kaug',fixed_model_list = fixed_models, tee_option=False, scale_nominal_param_value=scale_opt)
+        all_fim = doe_object.run_grid_search(exp1, design_ranges, dv_apply_name, dv_apply_time,record_name=store_name, mode='direct_kaug',fixed_model_list = fixed_models, tee_option=False, scale_nominal_param_value=scale_opt)
 
         
         return all_fim

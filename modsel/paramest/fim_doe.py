@@ -60,9 +60,10 @@ from pyomo.common.dependencies import (
 
 from pyomo.environ import *
 from pyomo.dae import *
-from mpisppy.opt import ef, sc
-import mpisppy.utils.sputils as sputils
+#from mpisppy.opt import ef, sc
+#import mpisppy.utils.sputils as sputils
 #import pandas as pd
+import json
 import time
 import pickle
 from itertools import permutations, product
@@ -1252,7 +1253,7 @@ class DesignOfExperiments:
 
         return result_object_list, fim_list
 
-    def run_grid_search(self, design_values, design_ranges, design_dimension_names, design_control_time, mode='sequential_finite', fixed_model_list=None, tee_option=False, scale_nominal_param_value=False, scale_constant_value=1, store_name= None, read_name=None,filename=None, formula='central', step=0.001):
+    def run_grid_search(self, design_values, design_ranges, design_dimension_names, design_control_time, record_name = "record", mode='sequential_finite', fixed_model_list=None, tee_option=False, scale_nominal_param_value=False, scale_constant_value=1, store_name= None, read_name=None,filename=None, formula='central', step=0.001):
         """Enumerate through full grid search for any number of design variables;
         solve square problems sequentially to compute FIMs.
         It calculates FIM with sensitivity information from four modes:
@@ -1326,6 +1327,8 @@ class DesignOfExperiments:
 
         build_time_store=[]
         solve_time_store=[]
+        
+        record = {}
 
         # loop over deign value combinations
         for design_set_iter in search_design_set:
@@ -1380,11 +1383,17 @@ class DesignOfExperiments:
                 build_time_store.append(result_iter.build_time)
                 solve_time_store.append(result_iter.solve_time)
 
-            count += 1
+            
 
             result_iter.calculate_FIM(self.design_values)
 
             t_now = time.time()
+            
+            #store
+            record[str(count)] = result_iter.FIM.tolist()
+            
+            
+            count += 1
 
             if self.verbose:
                 # give run information at each iteration
@@ -1407,7 +1416,12 @@ class DesignOfExperiments:
         # For user's access
         self.all_fim = result_combine
 
-        #
+        record = [record]
+        #print(record)
+        file_name = json.dumps(record)
+        f1 = open('./emimtf2n_FIM_info/'+record_name+".json", 'w')
+        f1.write(file_name)
+        f1.close()
 
         # Create figure drawing object
         figure_draw_object = Grid_Search_Result(design_ranges, design_dimension_names, design_control_time, result_combine, store_optimality_name=filename)
