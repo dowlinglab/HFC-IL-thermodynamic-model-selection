@@ -976,7 +976,11 @@ class DesignOfExperiments:
             dsdp_re, col = get_dsdp(mod, var_name, var_dict, tee=self.tee_opt)
             time1_solve = time.time()
             time_solve = time1_solve - time0_solve
-
+            
+            # get pressure
+            pressure = mod.fs.state_block.pressure.value
+            print('pressure:', pressure)
+            
             # analyze result
             dsdp_array = dsdp_re.toarray().T
             # here for construction. Remove after finishing.
@@ -1052,7 +1056,7 @@ class DesignOfExperiments:
                                       prior_FIM=prior_in_use, store_FIM=FIM_store_name,
                                       scale_constant_value=self.scale_constant_value)
             
-            
+            FIM_analysis.pressure = pressure
             self.jac = jac
             FIM_analysis.build_time = time_build
             FIM_analysis.solve_time = time_solve
@@ -1329,6 +1333,7 @@ class DesignOfExperiments:
         solve_time_store=[]
         
         record = {}
+        record_pressure = {}
 
         # loop over deign value combinations
         for design_set_iter in search_design_set:
@@ -1392,6 +1397,7 @@ class DesignOfExperiments:
             #store
             record[str(count)] = result_iter.FIM.tolist()
             
+            record_pressure[str(count)] = result_iter.pressure
             
             count += 1
 
@@ -1422,6 +1428,13 @@ class DesignOfExperiments:
         f1 = open('./emimtf2n_FIM_info/'+record_name+".json", 'w')
         f1.write(file_name)
         f1.close()
+        
+        record_pressure = [record_pressure]
+        #print(record)
+        file_name = json.dumps(record_pressure)
+        f2 = open('./emimtf2n_FIM_info/'+record_name+"_pressure.json", 'w')
+        f2.write(file_name)
+        f2.close()
 
         # Create figure drawing object
         figure_draw_object = Grid_Search_Result(design_ranges, design_dimension_names, design_control_time, result_combine, store_optimality_name=filename)
