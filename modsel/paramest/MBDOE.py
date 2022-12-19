@@ -80,14 +80,16 @@ class MBDOE:
         record = [record]
         #print(record)
         file_name = json.dumps(record)
-        f1 = open('./32_bmimpf6_FIM_info/'+record_name+".json", 'w')
+        #f1 = open('./32_bmimpf6_FIM_info/'+record_name+".json", 'w')
+        f1 = open('./125_emimtf2n_FIM_info/'+record_name+".json", 'w')
         f1.write(file_name)
         f1.close()
         
         # record pressure
         record_pressure = [record_pressure]
         file_name2 = json.dumps(record_pressure)
-        f2 = open('./32_bmimpf6_FIM_info/'+record_name+"_pressure.json", 'w')
+        #f2 = open('./32_bmimpf6_FIM_info/'+record_name+"_pressure.json", 'w')
+        f2 = open('./125_emimtf2n_FIM_info/'+record_name+"_pressure.json", 'w')
         f2.write(file_name2)
         f2.close()
             
@@ -119,10 +121,10 @@ class MBDOE:
         # (What goes here does not matter because we tell Pyomo.DOE that it does not need to fix design variables)
         dv_pass = {'fs.F101.inlet.temperature': t_control,
                    'fs.F101.inlet.pressure': t_control,
-                 'fs.F101.inlet.mole_frac_comp[0,"R32"]': t_control,
-                  # 'fs.F101.inlet.mole_frac_comp[0,"R125"]': t_control, 
-                  # "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']":t_control}
-                    "fs.F101.inlet.mole_frac_comp[0,'bmimpf6']":t_control}
+                 #'fs.F101.inlet.mole_frac_comp[0,"R32"]': t_control,
+                   'fs.F101.inlet.mole_frac_comp[0,"R125"]': t_control, 
+                   "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']":t_control}
+                  #  "fs.F101.inlet.mole_frac_comp[0,'bmimpf6']":t_control}
                    
         # Create measurement object
         #measure_pass = {'fs.F101.control_volume.properties_out[0.0].pressure': t_control}
@@ -140,16 +142,16 @@ class MBDOE:
         # This does not matter for this problem but needed for inputs
         exp1 = {'fs.F101.inlet.temperature': {0: 1},
                    'fs.F101.inlet.pressure': {0: 1},
-                 'fs.F101.inlet.mole_frac_comp[0,"R32"]': {0: 1},
-                #'fs.F101.inlet.mole_frac_comp[0,"R125"]': {0: 1},   
-                #"fs.F101.inlet.mole_frac_comp[0,'emimTf2N']": {0: 1}}
-                "fs.F101.inlet.mole_frac_comp[0,'bmimpf6']": {0: 1}}
+                # 'fs.F101.inlet.mole_frac_comp[0,"R32"]': {0: 1},
+                'fs.F101.inlet.mole_frac_comp[0,"R125"]': {0: 1},   
+                "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']": {0: 1}}
+                #"fs.F101.inlet.mole_frac_comp[0,'bmimpf6']": {0: 1}}
 
         design_names = ['model.fs.F101.inlet.temperature[0]', 'model.fs.F101.inlet.pressure[0]',
-                        'model.fs.F101.inlet.mole_frac_comp[0,"R32"]', 
-                        #'model.fs.F101.inlet.mole_frac_comp[0,"R125"]',
-                        #'fs.F101.inlet.mole_frac_comp[0,"emimTf2N"]']
-                        'fs.F101.inlet.mole_frac_comp[0,"bmimpf6"]']
+                       # 'model.fs.F101.inlet.mole_frac_comp[0,"R32"]', 
+                        'model.fs.F101.inlet.mole_frac_comp[0,"R125"]',
+                        'fs.F101.inlet.mole_frac_comp[0,"emimTf2N"]']
+                       # 'fs.F101.inlet.mole_frac_comp[0,"bmimpf6"]']
 
         
         
