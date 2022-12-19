@@ -118,9 +118,12 @@ class CEOSModels:
                                     'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1}
 
             elif self.Tdep_type == '3Params_Opt1':
-                param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
-                                    'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
-                                    'fs.properties.PR_kappa_B["R32", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2}
+                #param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
+                 #                   'fs.properties.PR_kappa_A["emimTf2N", "R32"]': self.PR_kappa_A_comp_2_comp_1,
+                  #                  'fs.properties.PR_kappa_B["R32", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2}
+                param_name_dict = { 'fs.properties.PR_kappa_A["R125", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
+                                    'fs.properties.PR_kappa_A["emimTf2N", "R125"]': self.PR_kappa_A_comp_2_comp_1,
+                                    'fs.properties.PR_kappa_B["R125", "emimTf2N"]': self.PR_kappa_B_comp_1_comp_2}
 
             elif self.Tdep_type == '3Params_Opt2':
                 param_name_dict = { 'fs.properties.PR_kappa_A["R32", "emimTf2N"]': self.PR_kappa_A_comp_1_comp_2, 
@@ -188,14 +191,23 @@ class CEOSModels:
                                     'fs.properties.SRK_kappa_C["emimTf2N", "R32"]': self.SRK_kappa_C_comp_2_comp_1}
 
             elif self.Tdep_type == 'Polynomial':
-                param_name_dict = { 'fs.properties.SRK_kappa_A["R32", "emimTf2N"]': self.SRK_kappa_A_comp_1_comp_2, 
-                                    'fs.properties.SRK_kappa_A["emimTf2N", "R32"]': self.SRK_kappa_A_comp_2_comp_1,
-                                    'fs.properties.SRK_kappa_B["R32", "emimTf2N"]': self.SRK_kappa_B_comp_1_comp_2,
-                                    'fs.properties.SRK_kappa_B["emimTf2N", "R32"]': self.SRK_kappa_B_comp_2_comp_1,
-                                    'fs.properties.SRK_kappa_C["R32", "emimTf2N"]': self.SRK_kappa_C_comp_1_comp_2,
-                                    'fs.properties.SRK_kappa_C["emimTf2N", "R32"]': self.SRK_kappa_C_comp_2_comp_1,
-                                    'fs.properties.SRK_kappa_D["R32", "emimTf2N"]': self.SRK_kappa_D_comp_1_comp_2,
-                                    'fs.properties.SRK_kappa_D["emimTf2N", "R32"]': self.SRK_kappa_D_comp_2_comp_1}
+                #param_name_dict = { 'fs.properties.SRK_kappa_A["R32", "emimTf2N"]': self.SRK_kappa_A_comp_1_comp_2, 
+                #                    'fs.properties.SRK_kappa_A["emimTf2N", "R32"]': self.SRK_kappa_A_comp_2_comp_1,
+                #                    'fs.properties.SRK_kappa_B["R32", "emimTf2N"]': self.SRK_kappa_B_comp_1_comp_2,
+                #                    'fs.properties.SRK_kappa_B["emimTf2N", "R32"]': self.SRK_kappa_B_comp_2_comp_1,
+                #                    'fs.properties.SRK_kappa_C["R32", "emimTf2N"]': self.SRK_kappa_C_comp_1_comp_2,
+                #                    'fs.properties.SRK_kappa_C["emimTf2N", "R32"]': self.SRK_kappa_C_comp_2_comp_1,
+                #                    'fs.properties.SRK_kappa_D["R32", "emimTf2N"]': self.SRK_kappa_D_comp_1_comp_2,
+                #                    'fs.properties.SRK_kappa_D["emimTf2N", "R32"]': self.SRK_kappa_D_comp_2_comp_1}
+                
+                param_name_dict = { 'fs.properties.SRK_kappa_A["R32", "bmimpf6"]': self.SRK_kappa_A_comp_1_comp_2, 
+                                    'fs.properties.SRK_kappa_A["bmimpf6", "R32"]': self.SRK_kappa_A_comp_2_comp_1,
+                                    'fs.properties.SRK_kappa_B["R32", "bmimpf6"]': self.SRK_kappa_B_comp_1_comp_2,
+                                    'fs.properties.SRK_kappa_B["bmimpf6", "R32"]': self.SRK_kappa_B_comp_2_comp_1,
+                                    'fs.properties.SRK_kappa_C["R32", "bmimpf6"]': self.SRK_kappa_C_comp_1_comp_2,
+                                    'fs.properties.SRK_kappa_C["bmimpf6", "R32"]': self.SRK_kappa_C_comp_2_comp_1,
+                                    'fs.properties.SRK_kappa_D["R32", "bmimpf6"]': self.SRK_kappa_D_comp_1_comp_2,
+                                    'fs.properties.SRK_kappa_D["bmimpf6", "R32"]': self.SRK_kappa_D_comp_2_comp_1}
                 
             
         self.param_name_dict = param_name_dict
