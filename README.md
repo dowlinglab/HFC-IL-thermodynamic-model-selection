@@ -71,8 +71,15 @@ Data list:
  - 32_bmimpf6_FIM_info/: folder contains HFC-R32 (bmimpf6) system FIM prior information
 
 
- 
+ ## Number of experiments based on D-optimality
 
+Position: modsel/paramest
+
+File list:
+- Apply_MBDOE_to_num_experiments.ipynb
+
+Data list:
+- PR_quadTdep_scaleopt.json
  
  
  
