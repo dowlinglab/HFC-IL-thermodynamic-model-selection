@@ -38,7 +38,7 @@ Fits for each model: Data/Fits
 
 AIC analysis for each model: Data/AIC
 
-Covariance matrices for each model: Data/Covariance
+Covariance matrices for each model (these covariances were calculated using parmest and were not included in the paper): Data/Covariance
 
 ### HFC-125/[emim][TF2N] System
 
