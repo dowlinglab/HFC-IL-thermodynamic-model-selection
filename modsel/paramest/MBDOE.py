@@ -53,30 +53,47 @@ class MBDOE:
         record = {}
         record["model_name"] = record_name
         
+        record_pressure = {}
+        record_pressure["model_name"] = record_name+"_pressure"
+        
         for i in exp_idx_set:
             print("==========Experiment index:", i, "===============")
             
-            res = self.doe(i, scale=scale_opt, init_temp_opt = init_temp_option, 
-                          init_pressure_opt = init_pressure_option, init_x_c1_opt = init_x_c1_option, poly_opt = poly_option)
             
-            record[str(i)] = res.FIM.tolist()
             
-            totalFIM += res.FIM
-            #except:
-                #failed_set.append(i)
-                #print("Failure initialization!")
+            try: 
+                res = self.doe(i, scale=scale_opt, init_temp_opt = init_temp_option, 
+                              init_pressure_opt = init_pressure_option, init_x_c1_opt = init_x_c1_option, poly_opt = poly_option)
+
+                record[str(i)] = res.FIM.tolist()
+
+                record_pressure[str(i)] = res.pressure
+
+                totalFIM += res.FIM
+            except:
+                failed_set.append(i)
+                print("Failure initialization!")
         
-        
+        print("Failed set:", failed_set)
         # record
         record["Total"] = totalFIM.tolist()
         record = [record]
-        print(record)
+        #print(record)
         file_name = json.dumps(record)
-        f1 = open('./emimtf2n_FIM_info/'+record_name+".json", 'w')
+        #f1 = open('./32_bmimpf6_FIM_info/'+record_name+".json", 'w')
+        f1 = open('./125_emimtf2n_FIM_info/'+record_name+".json", 'w')
         f1.write(file_name)
         f1.close()
+        
+        # record pressure
+        record_pressure = [record_pressure]
+        file_name2 = json.dumps(record_pressure)
+        #f2 = open('./32_bmimpf6_FIM_info/'+record_name+"_pressure.json", 'w')
+        f2 = open('./125_emimtf2n_FIM_info/'+record_name+"_pressure.json", 'w')
+        f2.write(file_name2)
+        f2.close()
             
-        print("Failed set:", failed_set)
+        
         if self.verbose: 
             print('======Result summary======')
             print('Four design criteria log10() value:')
@@ -104,9 +121,11 @@ class MBDOE:
         # (What goes here does not matter because we tell Pyomo.DOE that it does not need to fix design variables)
         dv_pass = {'fs.F101.inlet.temperature': t_control,
                    'fs.F101.inlet.pressure': t_control,
-                 'fs.F101.inlet.mole_frac_comp[0,"R32"]': t_control,
-                  "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']":t_control}
-
+                 #'fs.F101.inlet.mole_frac_comp[0,"R32"]': t_control,
+                   'fs.F101.inlet.mole_frac_comp[0,"R125"]': t_control, 
+                   "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']":t_control}
+                  #  "fs.F101.inlet.mole_frac_comp[0,'bmimpf6']":t_control}
+                   
         # Create measurement object
         #measure_pass = {'fs.F101.control_volume.properties_out[0.0].pressure': t_control}
         measure_pass = {'fs.state_block.pressure': t_control}
@@ -123,11 +142,16 @@ class MBDOE:
         # This does not matter for this problem but needed for inputs
         exp1 = {'fs.F101.inlet.temperature': {0: 1},
                    'fs.F101.inlet.pressure': {0: 1},
-                 'fs.F101.inlet.mole_frac_comp[0,"R32"]': {0: 1},
-                  "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']": {0: 1}}
+                # 'fs.F101.inlet.mole_frac_comp[0,"R32"]': {0: 1},
+                'fs.F101.inlet.mole_frac_comp[0,"R125"]': {0: 1},   
+                "fs.F101.inlet.mole_frac_comp[0,'emimTf2N']": {0: 1}}
+                #"fs.F101.inlet.mole_frac_comp[0,'bmimpf6']": {0: 1}}
 
         design_names = ['model.fs.F101.inlet.temperature[0]', 'model.fs.F101.inlet.pressure[0]',
-                        'model.fs.F101.inlet.mole_frac_comp[0,"R32"]', 'fs.F101.inlet.mole_frac_comp[0,"emimTf2N"]']
+                       # 'model.fs.F101.inlet.mole_frac_comp[0,"R32"]', 
+                        'model.fs.F101.inlet.mole_frac_comp[0,"R125"]',
+                        'fs.F101.inlet.mole_frac_comp[0,"emimTf2N"]']
+                       # 'fs.F101.inlet.mole_frac_comp[0,"bmimpf6"]']
 
         
         
@@ -160,7 +184,7 @@ class MBDOE:
         return result
     
     
-    def run_grid_search(self, design_range_values, fixed_models=None, prior_FIM=None, scale_opt=True,
+    def run_grid_search(self, design_range_values, fixed_models=None, prior_FIM=None, scale_opt=False,
                         scale_pressure = 1, store_name="record"):
         
         #createmod = self.create_model_object.create_model(self.data_exp.iloc[exp_idx], init_temp=init_temp_opt,
@@ -217,8 +241,8 @@ class MBDOE:
         design_ranges = design_range_values
 
         # Design variable names 
-        dv_apply_name = ['Temperature', 'x_R32']
-
+        #dv_apply_name = ['Temperature', 'x_R32']
+        dv_apply_name = ['Temperature', 'x_R125']
         # Design variable should be fixed at these time points
         dv_apply_time = [[0],[0]]
 
