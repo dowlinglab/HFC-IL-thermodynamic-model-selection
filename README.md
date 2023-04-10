@@ -1,4 +1,4 @@
-# extractive-distillation2
+# Data Science for Thermodynamic Modeling: Case Study for Ionic Liquid and Hydrofluorocarbon Refrigerant Mixtures
 
 ## Data
 
