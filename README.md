@@ -1,5 +1,9 @@
 # Data Science for Thermodynamic Modeling: Case Study for Ionic Liquid and Hydrofluorocarbon Refrigerant Mixtures
 
+If you use this code, please cite our paper:
+
+Befort, Bridgette J., Alejandro Garciadiego, Jialu Wang, Ke Wang, Gabriela Franco, Edward J. Maginn, and Alexander W. Dowling. "Data science for thermodynamic modeling: Case study for ionic liquid and hydrofluorocarbon refrigerant mixtures." Fluid Phase Equilibria (2023): 113833. [link](https://www.sciencedirect.com/science/article/pii/S0378381223001139)
+
 ## Data
 
 HFC-32/[emim][TF2N]: modsel/paramest/emimtf2n/R32/Final_Results/r32_emimtf2n_subset.csv
